@@ -1,10 +1,10 @@
 html {
-  font-size: 14px;
+  font-size: 18px;
 }
 
 @media (min-width: 768px) {
   html {
-    font-size: 16px;
+    font-size: 20px;
   }
 }
 
@@ -18,5 +18,14 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    margin-top: 10px;
+    background-color:azure;
+    color:blueviolet;
 }
+
+    body.header {
+        font-size: 26px;
+        position: absolute;
+        background-color: aliceblue;
+    }

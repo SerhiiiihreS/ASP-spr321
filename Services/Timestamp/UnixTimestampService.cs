@@ -2,8 +2,8 @@
 
 namespace ASP_spr321.Services.Timestamp
 {
-    public class UnixTimestampService:ITimestampService
+    public class UnixTimestampService : ITimestampService
     {
-        public long Timestamp => ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
+        public long Timestamp => (DateTimeOffset.UtcNow).ToUnixTimeSeconds();
     }
 }
