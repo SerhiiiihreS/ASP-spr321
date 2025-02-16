@@ -1,8 +1,11 @@
 using System.Diagnostics;
+using System.Text.Json;
 using ASP_spr321.Models;
+using ASP_spr321.Models.Home;
 using ASP_spr321.Services.OTP;
 using ASP_spr321.Services.Timestamp;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace ASP_spr321.Controllers
 {
@@ -44,6 +47,58 @@ namespace ASP_spr321.Controllers
             ViewData["OTP"] = _otpService.OTP;
             return View();
         }
+        public ViewResult Models()
+
+        {
+            HomeModelsViewModel viewModel = new();
+            if (HttpContext.Session.Keys.Contains("HomeModelsFormModel"))
+            {
+                viewModel.FormModel =
+                    JsonSerializer.Deserialize<HomeModelsFormModel>(
+                        HttpContext.Session.GetString("HomeModelsFormModel")
+                    );
+                HttpContext.Session.Remove("HomeModelsFormModel");
+            }
+         
+            return View(viewModel);
+        }
+        public RedirectToActionResult Register(HomeModelsFormModel formModel)
+        {
+            HttpContext.Session.SetString("HomeModelsFormModel",
+                JsonSerializer.Serialize(formModel)
+            );
+            //HomeModelsViewModel viewModel= new()
+            //{
+            //    FormModel = formModel
+            //};
+           
+            return RedirectToAction(nameof(Models) );
+        }
+        public JsonResult Ajax(HomeModelsFormModel formModel)
+        {
+            return Json(formModel);
+        }
+
+        public JsonResult AjaxJson([FromBody]HomeModelsAjaxModel formModel)
+        {
+            return Json(formModel);
+        }
+
+        public ViewResult ProductReviewForm()
+
+        {
+            HomeModelsViewModel viewModel = new();
+            if (HttpContext.Session.Keys.Contains("HomeModelsFormModel"))
+            {
+                viewModel.FormModel =
+                    JsonSerializer.Deserialize<HomeModelsFormModel>(
+                        HttpContext.Session.GetString("HomeModelsFormModel")
+                    );
+                HttpContext.Session.Remove("HomeModelsFormModel");
+            }
+
+            return View(viewModel);
+        } 
         public IActionResult Privacy()
         {
             return View();

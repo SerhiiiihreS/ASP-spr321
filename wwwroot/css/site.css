@@ -1,4 +1,4 @@
-html {
+﻿html {
   font-size: 18px;
 }
 
@@ -24,8 +24,218 @@ body {
     color:blueviolet;
 }
 
-    body.header {
-        font-size: 26px;
-        position: absolute;
-        background-color: aliceblue;
+body.header {
+   font-size: 20px;
+   position: absolute;
+   background-color: aliceblue;
+ }
+
+
+
+
+
+
+
+.rating-area1 {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+.rating-area1:not(:checked) > input {
+    display: none;
+}
+
+.rating-area1:not(:checked) > label {
+    float: right;
+    width: 42px;
+    padding: 0;
+    cursor: pointer;
+    font-size: 32px;
+    line-height: 32px;
+    color: lightgrey;
+    text-shadow: 1px 1px #bbb;
+}
+
+    .rating-area1:not(:checked) > label:before {
+        content: '★';
+    }
+    .rating-area1 > input:checked ~ label {
+        color: green;
+        text-shadow: 1px 1px #c60 greenyellow;
+    }
+
+    .rating-area1:not(:checked) > label:hover,
+    .rating-area1:not(:checked) > label:hover ~ label {
+        color: greenyellow;
+    }
+
+    .rating-area1 > input:checked + label:hover,
+    .rating-area1 > input:checked + label:hover ~ label,
+    .rating-area1> input:checked ~ label:hover,
+    .rating-area1 > input:checked ~ label:hover ~ label,
+    .rating-area1 > label:hover ~ input:checked ~ label {
+        color: greenyellow;
+        text-shadow: 1px 1px greenyellow;
+    }
+
+.rate-area1 > label:active {
+    position: relative;
+}
+
+.rating-mini {
+    display: inline-block;
+    font-size: 0;
+}
+
+    .rating-mini span {
+        padding: 0;
+        font-size: 20px;
+        line-height: 1;
+        color: lightgrey;
+    }
+
+    .rating-mini > span:before {
+        content: '★';
+    }
+
+    .rating-mini > span.active {
+        color: darkgreen;
+    }
+
+    .rating-area1 {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+.rating-area1:not(:checked) > input {
+    display: none;
+}
+
+.rating-area1:not(:checked) > label {
+    float: right;
+    width: 42px;
+    padding: 0;
+    cursor: pointer;
+    font-size: 32px;
+    line-height: 32px;
+    color: lightgrey;
+    text-shadow: 1px 1px #bbb;
+}
+
+    .rating-area1:not(:checked) > label:before {
+        content: '★';
+    }
+    .rating-area1 > input:checked ~ label {
+        color: green;
+        text-shadow: 1px 1px #c60 greenyellow;
+    }
+
+    .rating-area1:not(:checked) > label:hover,
+    .rating-area1:not(:checked) > label:hover ~ label {
+        color: greenyellow;
+    }
+
+    .rating-area1 > input:checked + label:hover,
+    .rating-area1 > input:checked + label:hover ~ label,
+    .rating-area1 > input:checked ~ label:hover,
+    .rating-area1 > input:checked ~ label:hover ~ label,
+    .rating-area1 > label:hover ~ input:checked ~ label {
+        color: greenyellow;
+        text-shadow: 1px 1px greenyellow;
+    }
+
+.rate-area1 > label:active {
+    position: relative;
+}
+
+.rating-mini {
+    display: inline-block;
+    font-size: 0;
+}
+
+    .rating-mini span {
+        padding: 0;
+        font-size: 20px;
+        line-height: 1;
+        color: lightgrey;
+    }
+
+    .rating-mini > span:before {
+        content: '★';
+    }
+
+    .rating-mini > span.active {
+        color: darkgreen;
+    }
+
+
+
+
+
+.rating-area2 {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+    .rating-area2:not(:checked) > input {
+        display: none;
+    }
+
+    .rating-area2:not(:checked) > label {
+        float: right;
+        width: 42px;
+        padding: 0;
+        cursor: pointer;
+        font-size: 32px;
+        line-height: 32px;
+        color: lightgrey;
+        text-shadow: 1px 1px #bbb;
+    }
+
+        .rating-area2:not(:checked) > label:before {
+            content: '★';
+        }
+
+    .rating-area2 > input:checked ~ label {
+        color: green;
+        text-shadow: 1px 1px #c60 orange;
+    }
+
+    .rating-area2:not(:checked) > label:hover,
+    .rating-area2:not(:checked) > label:hover ~ label {
+        color: orangered;
+    }
+
+    .rating-area2 > input:checked + label:hover,
+    .rating-area2 > input:checked + label:hover ~ label,
+    .rating-area2 > input:checked ~ label:hover,
+    .rating-area2 > input:checked ~ label:hover ~ label,
+    .rating-area2 > label:hover ~ input:checked ~ label {
+        color: orangered;
+        text-shadow: 1px 1px orange;
+    }
+
+.rate-area2 > label:active {
+    position: relative;
+}
+
+.rating-mini {
+    display: inline-block;
+    font-size: 0;
+}
+
+    .rating-mini span {
+        padding: 0;
+        font-size: 20px;
+        line-height: 1;
+        color: lightgrey;
+    }
+
+    .rating-mini > span:before {
+        content: '★';
+    }
+
+    .rating-mini > span.active {
+        color: orangered;
     }

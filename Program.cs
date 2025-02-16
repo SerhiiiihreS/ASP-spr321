@@ -10,6 +10,15 @@ builder.Services.AddSingleton<ITimestampService, SystemTimestampService>();
 //builder.Services.AddSingleton<ITimestampService, UnixTimestampService>();
 builder.Services.AddTransient<ITimestampService, UnixTimestampService>();
 builder.Services.AddTransient<OTPservice, OtpRand>();
+//https://learn.microsoft.com/ru-ru/aspnet/core/fundamentals/app-state?view=aspnetcore-9.0
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 
 
@@ -24,6 +33,8 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 
