@@ -7,14 +7,21 @@
 </div>
 
 <div class="form-tgr" style="display:flex;justify-content:space-around;height:1200px">
-    <div class="form" style=" background-color:lightcyan;font-size:17px;color:navy;width:800px; height:500px;padding-top:20px;padding-left:20px;padding-right:20px;
+    <div style=" background-color:lightcyan;font-size:17px;color:navy;width:800px; height:500px;padding-top:20px;padding-left:20px;padding-right:20px;
 border:1px,solid navy;border-radius:8px;margin-right:20px">
-        <h8 style="color:coral">FormData</h8>
-        <form id="ajax-form">
-            Автор:   &nbsp &nbsp  <input name="user-name" size="20" style="border:1px,solid navy;border-radius:5px" /><br /><br />
+        <form id="formHw">
+            Автор:   &nbsp &nbsp  <input name="username" style="border:1px,solid navy;border-radius:5px" /><br /><br />
             Контакт:&nbsp  <input type="tel" name="tel" style="border:1px,solid navy;border-radius:5px" /><br /><br />
 
-            <div class="rating-area1">
+           
+
+
+            <p>Тепер, будь ласка, залиште свій відгук про наш сайт.</p>
+            <textarea name="text" cols="80" rows="4" style="border:1px,solid navy;border-radius:5px"></textarea><br /><br />
+
+            Дата:&nbsp &nbsp &nbsp &nbsp  <input type="date" name="datetime" style="border:1px,solid navy;border-radius:5px" /><br /><br />
+
+            <div class="rating-area">
                 <input type="radio" id="star-5" name="rating" value="5">
                 <label for="star-5" title="Оценка «5»"></label>
                 <input type="radio" id="star-4" name="rating" value="4">
@@ -27,119 +34,83 @@ border:1px,solid navy;border-radius:8px;margin-right:20px">
                 <label for="star-1" title="Оценка «1»"></label>
             </div><br />
 
-
-            <p>Тепер, будь ласка, залиште свій відгук про наш сайт.</p>
-            <textarea cols="80" rows="4" style="border:1px,solid navy;border-radius:5px"></textarea><br /><br />
-
-            Дата:&nbsp &nbsp &nbsp &nbsp  <input type="datetime" name="datatime" style="border:1px,solid navy;border-radius:5px" /><br /><br />
-
             <button style="border:1px,solid navy;border-radius:5px;background-color:coral;color:navy;width:120px;height:35px;font-size:20px">Надіслати</button>
         </form>
     </div>
 
-    <div class="form" style=" background-color:lightcyan;font-size:17px;color:navy;width:800px; height:500px;padding-top:20px;padding-left:20px;padding-right:20px;
-border:1px,solid navy;border-radius:8px">
-        <h8 style="color:coral">JSON</h8>
-        <form id="ajax-form">
-            Автор:   &nbsp &nbsp  <input name="user-name" size="20" style="border:1px,solid navy;border-radius:5px" /><br /><br />
-            Контакт:&nbsp  <input type="tel" name="tel" style="border:1px,solid navy;border-radius:5px" /><br /><br />
+    <script>
+        document.addEventListener(               // З метою запобігання автоматичному надсиланню
+            'submit', e => {                     // форм утворюється загальний слухай подій submit
+                const form = e.target;           // Форми розрізняються за id
+                if(form.id == 'formHw') {     //
+                    e.preventDefault();          // preventDefault - припинення надсилання
 
-            <div class="rating-area2">
-                <input type="radio" id="star-5" name="rating" value="5">
-                <label for="star-5" title="Оценка «5»"></label>
-                <input type="radio" id="star-4" name="rating" value="4">
-                <label for="star-4" title="Оценка «4»"></label>
-                <input type="radio" id="star-3" name="rating" value="3">
-                <label for="star-3" title="Оценка «3»"></label>
-                <input type="radio" id="star-2" name="rating" value="2">
-                <label for="star-2" title="Оценка «2»"></label>
-                <input type="radio" id="star-1" name="rating" value="1">
-                <label for="star-1" title="Оценка «1»"></label>
-            </div><br />
+                    // в залежності від бекенду надсилаємо форму або
+                    // перетворивши її до JSON
+                    const body = {
+                        "UserName": form.querySelector('[name="username"]').value,
+                        "Tel": form.querySelector('[name="tel"]').value,
+                        "Text": form.querySelector('[name="text"]').value,
+                        "Datetime": form.querySelector('[name="datetime"]').value,
+                    };
+                    // або залишаємо формою, створюючи для передачі даних об'єкт FormData
+                    const formData = new FormData(form);
+
+                    // Надсилаємо дані в AJAX
+                    // для JSON:
+                    fetch( "/Home/AjaxJson1", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(body)
+                    })
+                    .then(r => r.json())
+                    .then(j1 => {
+                        console.log("AJAX-JSON", j1);
+                        document.getElementById("out1").innerText =
+                            `Одержані по JSON дані:\n\n Автор ->'${j1.UserName}'\n Контакт->'${j1.Tel}'\n Відгук->'${j1.Text}'\n Дата->'${j1.Datetime}'`;
+                   });
+
+                    // для форми:
+                    fetch( "/Home/Ajax1", {
+                         method: "POST",
+                         body: formData
+                    })
+                    .then(r => r.json())
+                    .then(j1 => {
+                        console.log("AJAX", j1);
+                        document.getElementById("out2").innerText =
+                            `Одержані по FORM дані: \n\n Автор ->'${j1.UserName}'\n Контакт->'${j1.Tel}'\n Відгук->'${j1.Text}'\n Дата->'${j1.Datetime}'`;
+                    });
+                }
 
 
-            <p>Тепер, будь ласка, залиште свій відгук про наш сайт.</p>
-            <textarea cols="80" rows="4" style="border:1px,solid navy;border-radius:5px"></textarea><br /><br />
 
-            Дата:&nbsp &nbsp &nbsp &nbsp  <input type="datetime" name="datatime" style="border:1px,solid navy;border-radius:5px" /><br /><br />
-
-            <button style="border:1px,solid navy;border-radius:5px;background-color:coral;color:navy;width:120px;height:35px;font-size:20px">Надіслати</button>
-        </form>
-    </div>
-
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="rating-result">
-    <span class="active"></span>
-    <span class="active"></span>
-    <span class="active"></span>
-    <span></span>
-    <span></span>
-</div>
-
-<p id="out-1"></p>
-<p id="out-2"></p>
-
-<script>
-    document.addEventListener(               // З метою запобігання автоматичному надсиланню
-        'submit', e => {                     // форм утворюється загальний слухай подій submit
-            const form = e.target;           // Форми розрізняються за id
-            if(form.id == 'ajax-form') {     //
-                e.preventDefault();          // preventDefault - припинення надсилання
-
-                // в залежності від бекенду надсилаємо форму або
-                // перетворивши її до JSON
-                const body = {
-                    "userName": form.querySelector('[name="user-name"]').value,
-                    "userEmail": form.querySelector('[name="user-email"]').value,
-                };
-                // або залишаємо формою, створюючи для передачі даних об'єкт FormData
-                const formData = new FormData(form);
-
-                // Надсилаємо дані в AJAX
-                // для JSON:
-                fetch( "/Home/AjaxJson", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(body)
-                })
-                .then(r => r.json())
-                .then(j => {
-                    console.log("AJAX-JSON", j);
-                    document.getElementById("out-1").innerText =
-                        `Одержані по JSON дані: userName='${j.userName}', userEmail='${j.userEmail}'`;
-                });
-
-                // для форми:
-                fetch( "/Home/Ajax", {
-                     method: "POST",
-                     body: formData
-                })
-                .then(r => r.json())
-                .then(j => {
-                    console.log("AJAX", j);
-                    document.getElementById("out-2").innerText =
-                        `Одержані по FORM дані: userName='${j.userName}', userEmail='${j.userEmail}'`;
-                });
             }
+        );
+
+
+    </script>
 
 
 
-        }
-    );
+
+    <div style=" background-color:lightcyan;font-size:17px;color:navy;width:800px; height:500px;padding-top:20px;padding-left:20px;padding-right:20px;
+border:1px,solid navy;border-radius:8px;margin-right:20px">
+        
+
+        <p id="out1"></p><br /><br />
 
 
-</script>
+        <p id="out2"></p>
+        <p>body</p>
+    </div>
+
+</div>
+
+
+
+
+
+

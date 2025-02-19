@@ -11,6 +11,7 @@ builder.Services.AddSingleton<ITimestampService, SystemTimestampService>();
 builder.Services.AddTransient<ITimestampService, UnixTimestampService>();
 builder.Services.AddTransient<OTPservice, OtpRand>();
 //https://learn.microsoft.com/ru-ru/aspnet/core/fundamentals/app-state?view=aspnetcore-9.0
+
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
@@ -26,6 +27,7 @@ builder.Services.AddSession(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -34,9 +36,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseSession();
+app.UseAuthorization(); 
 
-app.UseAuthorization();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

@@ -48,7 +48,6 @@ namespace ASP_spr321.Controllers
             return View();
         }
         public ViewResult Models()
-
         {
             HomeModelsViewModel viewModel = new();
             if (HttpContext.Session.Keys.Contains("HomeModelsFormModel"))
@@ -59,7 +58,6 @@ namespace ASP_spr321.Controllers
                     );
                 HttpContext.Session.Remove("HomeModelsFormModel");
             }
-         
             return View(viewModel);
         }
         public RedirectToActionResult Register(HomeModelsFormModel formModel)
@@ -67,13 +65,16 @@ namespace ASP_spr321.Controllers
             HttpContext.Session.SetString("HomeModelsFormModel",
                 JsonSerializer.Serialize(formModel)
             );
-            //HomeModelsViewModel viewModel= new()
-            //{
-            //    FormModel = formModel
-            //};
-           
+            HomeModelsViewModel viewModel = new()
+            {
+                FormModel = formModel
+            };
+
             return RedirectToAction(nameof(Models) );
         }
+
+
+
         public JsonResult Ajax(HomeModelsFormModel formModel)
         {
             return Json(formModel);
@@ -84,21 +85,61 @@ namespace ASP_spr321.Controllers
             return Json(formModel);
         }
 
+
+
+
+
+
+
+
+
         public ViewResult ProductReviewForm()
 
         {
-            HomeModelsViewModel viewModel = new();
-            if (HttpContext.Session.Keys.Contains("HomeModelsFormModel"))
+            FeedbackView viewModel1 = new();
+            if (HttpContext.Session.Keys.Contains("FeedbackDataForm"))
             {
-                viewModel.FormModel =
-                    JsonSerializer.Deserialize<HomeModelsFormModel>(
-                        HttpContext.Session.GetString("HomeModelsFormModel")
+                viewModel1.FormModel1 =
+                    JsonSerializer.Deserialize<FeedbackDataForm>(
+                        HttpContext.Session.GetString("FeedbackDataForm")
                     );
-                HttpContext.Session.Remove("HomeModelsFormModel");
+                HttpContext.Session.Remove("FeedbackDataForm");
             }
 
-            return View(viewModel);
-        } 
+            return View(viewModel1);
+        }
+
+        public RedirectToActionResult Register1(FeedbackDataForm formModel1)
+        {
+            HttpContext.Session.SetString("FeedbackDataForm",
+                JsonSerializer.Serialize(formModel1)
+            );
+            FeedbackView viewModel = new()
+            {
+                FormModel1 = formModel1
+            };
+
+            return RedirectToAction(nameof(ProductReviewForm));
+        }
+
+
+
+        public JsonResult Ajax1(FeedbackDataForm formModel1)
+        {
+            return Json(formModel1);
+        }
+
+        public JsonResult AjaxJson1([FromBody] FeedbackDataJson formModel1)
+        {
+            return Json(formModel1);
+        }
+
+       
+
+
+
+
+
         public IActionResult Privacy()
         {
             return View();
