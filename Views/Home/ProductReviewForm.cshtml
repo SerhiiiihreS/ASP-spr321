@@ -63,7 +63,7 @@ border:1px,solid navy;border-radius:8px;margin-right:20px">
                         headers: {
                             "Content-Type": "application/json"
                         },
-                        body: JSON.stringify(body)
+                        body:JSON.stringify(body)
                     })
                     .then(r => r.json())
                     .then(j1 => {
@@ -75,7 +75,7 @@ border:1px,solid navy;border-radius:8px;margin-right:20px">
                     // для форми:
                     fetch( "/Home/Ajax1", {
                          method: "POST",
-                         body: formData
+                         body:formData
                     })
                     .then(r => r.json())
                     .then(j1 => {
@@ -104,7 +104,8 @@ border:1px,solid navy;border-radius:8px;margin-right:20px">
 
 
         <p id="out2"></p>
-        <p>body</p>
+
+
     </div>
 
 </div>
