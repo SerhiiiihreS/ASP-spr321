@@ -41,6 +41,10 @@ namespace ASP_spr311.Controllers
                         Name = viewModel.FormModel!.UserName,
                         Email = viewModel.FormModel!.UserEmail,
                         Phone = viewModel.FormModel.UserPhone,
+                        DateBirth= viewModel.FormModel!.DateBirth,
+                        ShoeSize = viewModel.FormModel.ShoeSize,
+                        ClothingSize = viewModel.FormModel.ClothingSize,
+                        FingerSize = viewModel.FormModel.FingerSize,
                     });
                     String salt = "salt";
                     _dataContext.UserAccesses.Add(new()
@@ -98,6 +102,22 @@ namespace ASP_spr311.Controllers
                 if (String.IsNullOrEmpty(formModel.UserLogin))
                 {
                     errors[nameof(formModel.UserLogin)] = "Логін необхідно ввести";
+                }
+                if (String.IsNullOrEmpty(formModel.DateBirth))
+                {
+                    errors[nameof(formModel.DateBirth)] = "Дата народження необхідно ввести";
+                }
+                if (String.IsNullOrEmpty(formModel.ShoeSize))
+                {
+                    errors[nameof(formModel.ShoeSize)] = "Розмір взуття необхідно ввести";
+                }
+                if (String.IsNullOrEmpty(formModel.ClothingSize))
+                {
+                    errors[nameof(formModel.ClothingSize)] = "Розмір одягу необхідно ввести";
+                }
+                if (String.IsNullOrEmpty(formModel.FingerSize))
+                {
+                    errors[nameof(formModel.FingerSize)] = "Розмір пальця необхідно ввести";
                 }
                 else
                 {
