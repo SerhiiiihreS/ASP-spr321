@@ -1,4 +1,7 @@
+using ASP_SPR311.Middleware;
+using ASP_SPR311.Services.Kdf;
 using ASP_spr321.Data;
+using ASP_spr321.Services.Kdf;
 using ASP_spr321.Services.OTP;
 using ASP_spr321.Services.Timestamp;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSingleton<IKdfService, PbKdf1Service>();
 
 builder.Services.AddSingleton<ITimestampService, SystemTimestampService>();
 //builder.Services.AddSingleton<ITimestampService, UnixTimestampService>();
@@ -19,7 +24,7 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -48,6 +53,8 @@ app.UseRouting();
 app.UseAuthorization(); 
 
 app.UseSession();
+
+app.UseAuthSession();
 
 app.MapControllerRoute(
     name: "default",

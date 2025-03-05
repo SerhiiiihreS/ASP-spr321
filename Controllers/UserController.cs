@@ -2,16 +2,19 @@
 using ASP_spr321.Models.Home;
 
 using ASP_spr321.Models.User;
+using ASP_spr321.Services.Kdf;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Text.Json;
 
 namespace ASP_spr311.Controllers
 {
-    public class UserController(DataContext dataContext) : Controller
+    public class UserController(DataContext dataContext, IKdfService kdfService) : Controller
     {
         private const String signupFormKey = "UserSinnupFormModel";
         private readonly DataContext _dataContext = dataContext;
+        private readonly IKdfService _kdfService=kdfService;
         public IActionResult Index()
         {
             return View();
@@ -41,12 +44,12 @@ namespace ASP_spr311.Controllers
                         Name = viewModel.FormModel!.UserName,
                         Email = viewModel.FormModel!.UserEmail,
                         Phone = viewModel.FormModel.UserPhone,
-                        DateBirth= viewModel.FormModel!.DateBirth,
+                        DateBirth = viewModel.FormModel!.DateBirth,
                         ShoeSize = viewModel.FormModel.ShoeSize,
                         ClothingSize = viewModel.FormModel.ClothingSize,
                         FingerSize = viewModel.FormModel.FingerSize,
                     });
-                    String salt = "salt";
+                    String salt = Guid.NewGuid().ToString()[..16];
                     _dataContext.UserAccesses.Add(new()
                     {
                         Id = Guid.NewGuid(),
@@ -54,7 +57,9 @@ namespace ASP_spr311.Controllers
                         Login = viewModel.FormModel!.UserLogin,
                         RoleId = "guest",
                         Salt = salt,
-                        Dk = salt + viewModel.FormModel!.UserPassword,
+                        Dk =_kdfService.DerivedKey (
+                            viewModel.FormModel!.UserPassword,
+                            salt),
 
 
 
@@ -68,6 +73,58 @@ namespace ASP_spr311.Controllers
             }
             return View(viewModel);
         }
+
+        public IActionResult Signin()
+        {
+            // 'Basic' HTTP Authentication Scheme  https://datatracker.ietf.org/doc/html/rfc7617#section-2
+            // Дані автентифікації приходять у заголовку Authorization
+            // за схемою  Authentication: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+            // де дані - Base64 закодована послідовність "login:password"
+            String authHeader = Request.Headers.Authorization.ToString();
+            if (String.IsNullOrEmpty(authHeader))
+            {
+                return Json(new { status = 401, message = "Authorization header required" });
+            }
+            String scheme = "Basic ";
+            if (!authHeader.StartsWith(scheme))
+            {
+                return Json(new { status = 401, message = $"Authorization scheme must be {scheme}" });
+            }
+            String credentials = authHeader[scheme.Length..];
+            String authData;
+            try
+            {
+                authData = System.Text.Encoding.UTF8.GetString(
+                    Base64UrlTextEncoder.Decode(credentials)
+                );
+            }
+            catch
+            {
+                return Json(new { status = 401, message = $"Not valid Base64 code '{credentials}'" });
+            }
+            // authData == "login:password"
+            String[] parts = authData.Split(':', 2);
+            if (parts.Length != 2)
+            {
+                return Json(new { status = 401, message = $"Not valid credentials format (missing ':'?)" });
+            }
+            String login = parts[0];
+            String password = parts[1];
+            var userAccess = _dataContext.UserAccesses.FirstOrDefault(ua => ua.Login == login);
+            if (userAccess == null)
+            {
+                return Json(new { status = 401, message = "Credentials rejected" });
+            }
+            if (_kdfService.DerivedKey(password, userAccess.Salt) != userAccess.Dk)
+            {
+                return Json(new { status = 401, message = "Credentials rejected." });
+            }
+            // Зберігаємо у сесію відомості про автентифікацію
+            HttpContext.Session.SetString("userAccessId", userAccess.Id.ToString());
+
+            return Json(new { status = 200, message = "OK" });
+        }
+
 
 
         public RedirectToActionResult Register([FromForm] UserSinnupFormModel formModel)

@@ -16,6 +16,7 @@ namespace ASP_spr321.Data.Entities
         public String Salt { get; set; } = null!;
         public String Dk { get; set; } = null!;
 
+        public UserData UserData { get; set; } = null!; 
 
         public override string ToString()
         {
