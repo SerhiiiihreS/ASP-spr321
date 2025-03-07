@@ -26,7 +26,7 @@ namespace ASP_SPR311.Middleware
                 context.Items.Add("auth", "OK");
 
                 // У сесії - лише ID, знаходимо усі дані про користувача
-                // dataContext.UserAccesses
+                //dataContext.UserAccesses
             }
             // Call the next delegate/middleware in the pipeline.
             await _next(context);

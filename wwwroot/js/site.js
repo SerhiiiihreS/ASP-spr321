@@ -3,26 +3,38 @@
 
 // Write your JavaScript code.
 document.addEventListener('submit', e => {
+    const form = e.target;
     if (form.id == "auth-modal-form") {
         e.preventDefault();
         const login = form.querySelector('[name="AuthLogin"]').value;
         const password = form.querySelector('[name="AuthPassword"]').value;
-        const credentials = btoa(logi + ':' + password);
-        fetch("/User/Signin", {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Basic' + credentials
-            }
-        }).then(r => r.json())
-            .then(j => {
-                if (j.status == 200) {
-                    window.location.reload();
+        if (login == null) {
+            e.preventDefault();
+            console.log("Fill in login");
+        }
+        else if (password == null) {
+            e.preventDefault();
+            console.log("Fill in password");
+        }
+        else {
+            const credentials = btoa(login + ':' + password);
+            fetch("/User/Signin", {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Basic ' + credentials
                 }
-                else {
-                    console.log(j);
-                }
-                
-            });
-        console.log("Submit stopped");
+            }).then(r => r.json())
+                .then(j => {
+                    if (j.status == 200) {
+                        window.location.reload();
+                    }
+                    else {
+                        console.log(j.message);
+                        document.getElementById("mess").innerText = ` ${j.message}`;
+                    }
+                });
+
+        }
+           
     }
 });

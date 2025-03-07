@@ -36,7 +36,7 @@
                     </ul>
                     @if(isAuthenticated)
                     {
-                        <a class=" nav-link text-dark" href="? Lol"></a>
+                        <a class="nav-link text-dark" href="?logout">Sign Out</a>
                     }
                     else
                     {
@@ -91,7 +91,11 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+                    <div id="mess"
+                        style="width:200px;height:30px;margin-right:50px;font-size:17px;color:red;">
+
+                    </div>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
                     <button type="submit" form="auth-modal-form" class="btn btn-primary">Вхід</button>
                 </div>
             </div>

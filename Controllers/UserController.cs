@@ -113,12 +113,13 @@ namespace ASP_spr311.Controllers
             var userAccess = _dataContext.UserAccesses.FirstOrDefault(ua => ua.Login == login);
             if (userAccess == null)
             {
-                return Json(new { status = 401, message = "Credentials rejected" });
+                return Json(new { status = 401, message = "Введіть логін!" });
             }
-            if (_kdfService.DerivedKey(password, userAccess.Salt) != userAccess.Dk)
+            if (_kdfService.DerivedKey(password, userAccess.Salt) != userAccess.Dk && _kdfService.DerivedKey(password, userAccess.Salt) != null)
             {
-                return Json(new { status = 401, message = "Credentials rejected." });
+                return Json(new { status = 401, message = "Введіть пароль!" });
             }
+           
             // Зберігаємо у сесію відомості про автентифікацію
             HttpContext.Session.SetString("userAccessId", userAccess.Id.ToString());
 
