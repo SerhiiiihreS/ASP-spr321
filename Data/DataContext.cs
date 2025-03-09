@@ -24,6 +24,13 @@ namespace ASP_spr321.Data
                 .HasForeignKey(ua => ua.UserId)
                 .HasPrincipalKey(u => u.Id);
 
+            modelBuilder.Entity<Entities.UserAccess>()
+                .HasOne(ua => ua.UserRole)
+                .WithMany()
+                .HasForeignKey(ua => ua.RoleId);
+
+
+
             modelBuilder.Entity<Entities.UserRole>().HasData(
                 new Entities.UserRole()
                 {
