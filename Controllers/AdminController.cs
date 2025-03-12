@@ -9,18 +9,20 @@ namespace ASP_spr321.Controllers
 {
     public class AdminController(DataContext dataContext, IStorageService storageService) : Controller
     {
-        private readonly DataContext _dataContext=dataContext;
-        private readonly IStorageService _storageService=storageService;
+        private readonly DataContext _dataContext = dataContext;
+        private readonly IStorageService _storageService = storageService;
+
         public IActionResult Index()
         {
             String? canCreate = HttpContext.User.Claims
                 .FirstOrDefault(c => c.Type == "CanCreate")?.Value;
-                if(canCreate != "1")
-                {
-                    Response.StatusCode=StatusCodes.Status403Forbidden;
-                    return NoContent();
-                }
-                
+
+            if (canCreate != "1")
+            {
+                Response.StatusCode = StatusCodes.Status403Forbidden;
+                return NoContent();
+            }
+
             return View();
         }
 
@@ -36,9 +38,15 @@ namespace ASP_spr321.Controllers
                 Slug = formModel.Slug,
                 ImageUrl = _storageService.SaveFile(formModel.Image)
             };
-                
             _dataContext.Categories.Add(category);
-            _dataContext.SaveChanges();
+            try
+            {
+                _dataContext.SaveChanges();
+            }
+            catch
+            {
+                // _storageService.DeleteFile(category.ImageUrl)
+            }
             return Json(category);
         }
     }

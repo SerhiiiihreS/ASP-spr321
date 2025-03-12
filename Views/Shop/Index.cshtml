@@ -1,0 +1,13 @@
+﻿@model ASP_spr321.Models.Shop.ShopIndexViewModel
+@{
+    ViewData["Title"] = "Shop";
+}
+<div class="text-center">
+    <h1 class="display-4">Крамниця</h1>
+</div>
+
+@foreach(var category in Model.Categories)
+{
+    <img src="/Shop/Image/@(category.ImageUrl)" alt="Image" />
+    <p>@category.Name</p>
+}

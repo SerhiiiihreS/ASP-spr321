@@ -33,11 +33,10 @@ document.addEventListener('submit', e => {
                         document.getElementById("mess").innerText = ` ${j.message}`;
                     }
                 });
-
         }
-        
-          
     }
+
+
     if (form.id == "admin-category-form") {
         e.preventDefault();
         fetch("/Admin/AddCategory", {

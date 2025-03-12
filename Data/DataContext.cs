@@ -2,13 +2,15 @@
 
 namespace ASP_spr321.Data
 {
-    public class DataContext:DbContext
+    public class DataContext : DbContext
     {
         public DbSet<Entities.UserData> UsersData { get; private set; }
         public DbSet<Entities.UserRole> UserRoles { get; private set; }
         public DbSet<Entities.UserAccess> UserAccesses { get; private set; }
         public DbSet<Entities.Category> Categories { get; private set; }
-        public DataContext(DbContextOptions options) : base(options) { }
+
+        public DataContext(DbContextOptions options) : base(options)
+        { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,7 +33,9 @@ namespace ASP_spr321.Data
             modelBuilder.Entity<Entities.UserAccess>()
                 .HasOne(ua => ua.UserRole)
                 .WithMany()
-                .HasForeignKey(ua => ua.RoleId);
+                .HasForeignKey(ua => ua.RoleId);   // якщо імена полів стандартні (Id), то
+                                                   //.HasPrincipalKey(r => r.Id);     // можна не зазначати
+
 
 
 
@@ -74,6 +78,5 @@ namespace ASP_spr321.Data
                 }
             );
         }
-
     }
 }
