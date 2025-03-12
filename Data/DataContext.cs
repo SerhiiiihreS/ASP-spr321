@@ -7,12 +7,16 @@ namespace ASP_spr321.Data
         public DbSet<Entities.UserData> UsersData { get; private set; }
         public DbSet<Entities.UserRole> UserRoles { get; private set; }
         public DbSet<Entities.UserAccess> UserAccesses { get; private set; }
-
+        public DbSet<Entities.Category> Categories { get; private set; }
         public DataContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("ASP");
+
+            modelBuilder.Entity<Entities.Category>()
+                .HasIndex(c => c.Slug)
+                .IsUnique();
 
             modelBuilder.Entity<Entities.UserAccess>()
                 .HasIndex(a => a.Login)

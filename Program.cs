@@ -3,6 +3,7 @@ using ASP_SPR311.Services.Kdf;
 using ASP_spr321.Data;
 using ASP_spr321.Services.Kdf;
 using ASP_spr321.Services.OTP;
+using ASP_spr321.Services.Storage;
 using ASP_spr321.Services.Timestamp;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<IKdfService, PbKdf1Service>();
+builder.Services.AddSingleton<IStorageService, FileStorageService>();
 
 builder.Services.AddSingleton<ITimestampService, SystemTimestampService>();
 //builder.Services.AddSingleton<ITimestampService, UnixTimestampService>();

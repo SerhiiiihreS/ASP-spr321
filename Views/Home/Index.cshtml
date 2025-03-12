@@ -1,5 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    String? canCreate = Context.User.Claims
+                .FirstOrDefault(c => c.Type == "CanCreate")?.Value;
+
 }
 <div class="Ind"" >
     <div class="text-center">
@@ -23,6 +26,10 @@
             <li><a asp-controller="Home" asp-action="OTP">ОТР </a></li>
             <li><a asp-controller="Home" asp-action="ProductReviewForm">Форма відгуку щодо товару </a></li>
         </ol>
-    </h5> 
+    </h5>
+    @if (canCreate == "1")
+    {
+        <h3><a asp-controller="Admin">6.Панель адміністратора </a></h3>
+    }
     
 </div>
