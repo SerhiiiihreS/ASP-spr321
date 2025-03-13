@@ -1,4 +1,6 @@
-﻿namespace ASP_spr321.Data.Entities
+﻿using ASP_spr321.Models.Admin;
+
+namespace ASP_spr321.Data.Entities
 {
     public class Category
     {
@@ -8,5 +10,6 @@
         public String Description { get; set; } = null!;
         public String Slug { get; set; } = null!;
         public String ImageUrl { get; set; } = null!;
+
     }
 }

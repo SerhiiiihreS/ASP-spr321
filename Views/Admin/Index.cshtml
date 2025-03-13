@@ -1,14 +1,19 @@
-﻿﻿<div class="text-center">
+﻿
+<div class="text-center">
     <h1 class="display-4">Сторінка адміністратора</h1>
 </div>
 
 <div class="row">
     <div class="col">
         <h2>Категорії</h2>
-        <form id="admin-category-form" enctype="multipart/form-data">
-            Назва: <input name="category-name" /><br />
+        <form  id="admin-category-form" enctype="multipart/form-data">
+            <div id="mes-nam" style="color:darkred; font-size:30px" ></div> 
+            Назва: <input id="name" name="category-name"><br />
+            <div id="mes-nam" style="color:darkred"></div><br />
             Опис: <textarea name="category-description"></textarea><br />
+            <div id="mes-nam" style="color:darkred"></div><br />
             Адреса: <input name="category-slug" /><br />
+            <div id="mes-nam" style="color:darkred"></div><br />
             Картинка:<input name="category-image" type="file" /><br />
             <button type="submit">Додати</button>
         </form>
