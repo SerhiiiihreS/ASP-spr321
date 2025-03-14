@@ -44,18 +44,22 @@ document.addEventListener('submit', e => {
             body: new FormData(form)
         }).then(r => r.json())
             .then(j => {
-                if (j.status == 401) {
+                if (j.status == 400) {
                     console.log(j.message);
                     e.preventDefault();
-                    document.getElementById("mes-nam").innerText = ` ${j.message2}`;
                     alert(`${j.message}`);
                     
-                    
                 }
-                else 
-                {
+                else if (j.status == 401) {
+                    console.log(j.message);
+                    e.preventDefault();
+                    alert(`${j.message}`);
+                }
+                
+                else {
                     window.location.reload();
                 }
-            });
+
+          });
     }
 });

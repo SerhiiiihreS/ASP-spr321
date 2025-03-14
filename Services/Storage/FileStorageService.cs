@@ -1,34 +1,31 @@
 ﻿
-using Microsoft.EntityFrameworkCore.Metadata;
+using static System.Net.Mime.MediaTypeNames;
 
-namespace ASP_spr321.Services.Storage
+namespace ASP_spr321.Services.Storage;
+public class FileStorageService : IStorageService
 {
-    public class FileStorageService : IStorageService
+    private const String storagePath = "C:\\StorageASP311\\";
+
+    public string GetRealPath(string name)
     {
-        private const String storagePath = "C:\\StorageASP311\\";
+        return storagePath + name;
+    }
 
-        public string GetRealPath(string name)
-        {
-            return storagePath + name;
-        }
-
-        public string SaveFile(IFormFile formFile)
-        {
-            // 1. З імені файлу визначити розширення
-            // 2. згенерувати нове ім'я зберігши розширення, переконатись в його унікальності
-            // 3. скопіювати formFile до сховища під новим іменем
+    public string SaveFile(IFormFile formFile)
+    {
+        // 1. З імені файлу визначити розширення
+        // 2. згенерувати нове ім'я зберігши розширення, переконатись в його унікальності
+        // 3. скопіювати formFile до сховища під новим іменем
+        String savedName;
+        String fullName;
             var ext = Path.GetExtension(formFile.FileName);
-            String savedName;
-            String fullName;
-            do
-            {
-                savedName = Guid.NewGuid() + ext;
-                fullName = storagePath + savedName;
-            } while (File.Exists(fullName));
+        do
+        {
+            savedName = Guid.NewGuid() + ext;
+            fullName = storagePath + savedName;
+        } while (File.Exists(fullName));
 
-            formFile.CopyTo(new FileStream(fullName, FileMode.CreateNew));
-
-            return savedName;
-        }
+        formFile.CopyTo(new FileStream(fullName, FileMode.CreateNew));
+        return savedName;
     }
 }

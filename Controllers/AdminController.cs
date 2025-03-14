@@ -42,32 +42,41 @@ namespace ASP_spr321.Controllers
                 Slug = formModel.Slug,
                 ImageUrl = _storageService.SaveFile(formModel.Image)
             };
-            if (String.IsNullOrEmpty(category.Name) )
+            if (String.IsNullOrEmpty(category.Name) && String.IsNullOrEmpty(category.Description) && String.IsNullOrEmpty(category.Slug) )
             {
-                return Json(new { status = 401, message = "Не всі поля заповнені!" , message2 = "*"});
-            }
-            if (String.IsNullOrEmpty(category.Description) )
-            {
-                return Json(new { status = 401, message = "Не всі поля заповнені!" });
-            }
-            if (String.IsNullOrEmpty(category.Slug))
-            {
-                return Json(new { status = 401, message = "Не всі поля заповнені!" });
+                return Json(new { status = 400, message = "Поля пусті!" });
             }
             else
             {
-                _dataContext.Categories.Add(category);
-                try
+                if (String.IsNullOrEmpty(category.Name) || String.IsNullOrEmpty(category.Description) || String.IsNullOrEmpty(category.Slug))
                 {
-                    _dataContext.SaveChanges();
+                    return Json(new { status = 401, message = "Не всі поля заповнені!" });
                 }
-                catch
+                if (String.IsNullOrEmpty(category.Name) && String.IsNullOrEmpty(category.Description) || String.IsNullOrEmpty(category.Slug))
                 {
-                    // _storageService.DeleteFile(category.ImageUrl)
+                    return Json(new { status = 401, message = "Не всі поля заповнені!" });
                 }
-                return Json(category);
+                if (String.IsNullOrEmpty(category.Name) || String.IsNullOrEmpty(category.Description) && String.IsNullOrEmpty(category.Slug))
+                {
+                    return Json(new { status = 401, message = "Не всі поля заповнені!" });
+                }
+                else
+                {
+                    _dataContext.Categories.Add(category);
+                    try
+                    {
+                        _dataContext.SaveChanges();
+                    }
+                    catch
+                    {
+                        //_storageService.DeleteFile(category.ImageUrl)
+                    }
+                    return Json(category);
+
+                }
 
             }
+            
             
         }
     }
