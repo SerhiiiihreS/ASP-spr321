@@ -105,7 +105,8 @@ namespace ASP_spr321.Controllers
                 Name = formModel.Name,
                 Description = formModel.Description,
                 Slug = formModel.Slug,
-                Price = formModel.Price,
+                Price =price,
+
                 Stock = formModel.Stock,
                 ImagesCsv = String.Join(',',
                          formModel
@@ -120,9 +121,9 @@ namespace ASP_spr321.Controllers
             {
                 _dataContext.SaveChanges();
             }
-            catch(Exception ex) 
+            catch
             {
-                    price = 0;
+                   
                 //_storageService.DeleteFile(category.ImageUrl)
             }
             return Json(product);

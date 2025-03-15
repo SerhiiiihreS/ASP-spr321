@@ -19,18 +19,25 @@ namespace ASP_spr321.Data
             modelBuilder.HasDefaultSchema("ASP");
 
             modelBuilder.Entity<Entities.Product>()
+               .HasIndex(p => p.Slug)
+               .IsUnique();
+
+            modelBuilder.Entity<Entities.Product>()
                 .HasOne(p => p.Category)
                 .WithMany(c => c.Products)
-                .HasForeignKey(p => p.CategoryId)
-                .HasPrincipalKey(c=>c.Id);
+                .HasForeignKey(p => p.CategoryId)   // Не обов'язково якщо імена правильні
+                .HasPrincipalKey(c => c.Id);
 
-
+ 
 
             modelBuilder.Entity<Entities.Category>()
                 .HasOne(c => c.ParentCategory)
                 .WithMany()
                 .HasForeignKey(p => p.ParentId);
 
+            modelBuilder.Entity<Entities.Category>()
+                .HasIndex(c => c.Slug)
+                .IsUnique();
 
             modelBuilder.Entity<Entities.UserAccess>()
                 .HasIndex(a => a.Login)

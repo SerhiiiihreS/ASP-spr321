@@ -12,7 +12,7 @@ namespace ASP_spr321.Data.Entities
         public String  ImagesCsv { get; set; } = String.Empty;
 
         [Column(TypeName = "decimal(5, 2)")]
-        public String Price { get; set; } = null!;
+        public double Price { get; set; } 
         public int     Stock { get; set; } = 1;
         public Category Category { get; set; } = null!;
     }

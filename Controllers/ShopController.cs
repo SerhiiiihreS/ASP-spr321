@@ -2,6 +2,7 @@
 using ASP_spr321.Models.Shop;
 using ASP_spr321.Services.Storage;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASP_spr321.Controllers
 {
@@ -24,7 +25,10 @@ namespace ASP_spr321.Controllers
         {
             ShopCategoryViewModel viewModel = new()
             {
-                Category = _dataContext.Categories.FirstOrDefault(c=>c.Slug==id)
+                Category = _dataContext
+                .Categories
+                .Include(c=>c.Products)
+                .FirstOrDefault(c=>c.Slug==id)
             };
 
             return View(viewModel);
