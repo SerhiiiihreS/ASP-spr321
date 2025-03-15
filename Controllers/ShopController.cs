@@ -20,6 +20,15 @@ namespace ASP_spr321.Controllers
 
             return View(viewModel);
         }
+        public IActionResult Category([FromRoute] String id)
+        {
+            ShopCategoryViewModel viewModel = new()
+            {
+                Category = _dataContext.Categories.FirstOrDefault(c=>c.Slug==id)
+            };
+
+            return View(viewModel);
+        }
 
         public FileResult Image([FromRoute] String id)
         {
