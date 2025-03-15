@@ -5,6 +5,6 @@ namespace ASP_spr321.Models.Shop
 {
     public class ShopCategoryViewModel
     {
-        public Category? Category { get; set } = null!;
+        public Category? Category { get; set; } = null!;
     }
 }

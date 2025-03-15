@@ -5,6 +5,8 @@ using ASP_spr321.Models.Admin;
 using ASP_spr321.Models.User;
 using ASP_spr321.Services.Storage;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text.Json;
@@ -26,8 +28,12 @@ namespace ASP_spr321.Controllers
                 Response.StatusCode = StatusCodes.Status403Forbidden;
                 return NoContent();
             }
+            AdminIndexViewModel viewModel = new()
+            {
+                Categories = _dataContext.Categories.ToList(),
+            };
 
-            return View();
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -42,7 +48,7 @@ namespace ASP_spr321.Controllers
                 Slug = formModel.Slug,
                 ImageUrl = _storageService.SaveFile(formModel.Image)
             };
-            if (String.IsNullOrEmpty(category.Name) && String.IsNullOrEmpty(category.Description) && String.IsNullOrEmpty(category.Slug) )
+            if (String.IsNullOrEmpty(category.Name) && String.IsNullOrEmpty(category.Description) && String.IsNullOrEmpty(category.Slug))
             {
                 return Json(new { status = 400, message = "Поля пусті!" });
             }
@@ -76,8 +82,50 @@ namespace ASP_spr321.Controllers
                 }
 
             }
-            
-            
+
+
+        }
+
+        [HttpPost]
+        public JsonResult AddProduct(ProductFormModel formModel)
+        {
+            double price;
+            try
+            {
+                price = double.Parse(formModel.Price, System.Globalization.CultureInfo.InvariantCulture);
+            }
+            catch
+            {
+                price = double.Parse(formModel.Price.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+            }
+            Product product = new()
+            {
+                Id = Guid.NewGuid(),
+                CategoryId = formModel.CategoryId,
+                Name = formModel.Name,
+                Description = formModel.Description,
+                Slug = formModel.Slug,
+                Price = formModel.Price,
+                Stock = formModel.Stock,
+                ImagesCsv = String.Join(',',
+                         formModel
+                         .Images
+                         .Select(img => _storageService.SaveFile(img))
+                         ),
+            };
+
+
+            _dataContext.Products.Add(product);
+            try
+            {
+                _dataContext.SaveChanges();
+            }
+            catch(Exception ex) 
+            {
+                    price = 0;
+                //_storageService.DeleteFile(category.ImageUrl)
+            }
+            return Json(product);
         }
     }
 }

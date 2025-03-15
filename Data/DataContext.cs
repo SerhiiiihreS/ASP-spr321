@@ -9,6 +9,8 @@ namespace ASP_spr321.Data
         public DbSet<Entities.UserAccess> UserAccesses { get; private set; }
         public DbSet<Entities.Category> Categories { get; private set; }
 
+        public DbSet<Entities.Product> Products{ get; private set; }
+
         public DataContext(DbContextOptions options) : base(options)
         { }
 
@@ -16,13 +18,25 @@ namespace ASP_spr321.Data
         {
             modelBuilder.HasDefaultSchema("ASP");
 
+            modelBuilder.Entity<Entities.Product>()
+                .HasOne(p => p.Category)
+                .WithMany(c => c.Products)
+                .HasForeignKey(p => p.CategoryId)
+                .HasPrincipalKey(c=>c.Id);
+
+
+
             modelBuilder.Entity<Entities.Category>()
-                .HasIndex(c => c.Slug)
-                .IsUnique();
+                .HasOne(c => c.ParentCategory)
+                .WithMany()
+                .HasForeignKey(p => p.ParentId);
+
 
             modelBuilder.Entity<Entities.UserAccess>()
                 .HasIndex(a => a.Login)
                 .IsUnique();
+                
+
 
             modelBuilder.Entity<Entities.UserAccess>()
                 .HasOne(ua => ua.UserData)
