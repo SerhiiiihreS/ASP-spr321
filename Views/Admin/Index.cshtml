@@ -25,15 +25,14 @@
             Назва:  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp   <input id="name" name="product-name" style="width:400px;border:1px solid green;border-radius:3px;"><br /><br />
             Опис: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <textarea name="product-description" style="height:250px;width:400px;border:1px solid green;border-radius:3px;;"></textarea><br /><br />
             Артикул/штрихкод:&nbsp&nbsp&nbsp&nbsp&nbsp <input name="product-slug" style="width:400px;border:1px solid green;border-radius:3px;" /><br /><br />
-            Картинка:&nbsp&nbsp <input name="product-image" type="file" /><br /><br />
+            Картинка:&nbsp&nbsp <input name="product-image" type="file" multiple /><br /><br />
             Ціна:&nbsp&nbsp <input name="product-price" type="number" /><br /><br />
             Кількість:&nbsp&nbsp <input name="product-stock" type="number" /><br /><br />
-            Категория:&nbsp&nbsp <select name="category-id" > 
+            Категорія:&nbsp&nbsp <select name="category-id" > 
                 @foreach (var c in Model.Categories)
                 {
                     <option value="@c.Id">@c.Name</option>
                 }
-
             <</select>
             
             <button type="submit">Додати</button>

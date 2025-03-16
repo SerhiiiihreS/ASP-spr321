@@ -12,7 +12,7 @@ namespace ASP_spr321.Models.Admin
             public String Name { get; set; } = null!;
 
             [FromForm(Name = "product-description")]
-            public String Description { get; set; } = null!;
+            public String? Description { get; set; } = null!;
 
 
             [FromForm(Name = "product-slug")]

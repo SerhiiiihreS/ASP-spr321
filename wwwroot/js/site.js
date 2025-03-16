@@ -64,14 +64,14 @@ document.addEventListener('submit', e => {
     }
 
 
-    if (form.id == "aadmin-product-form") {
+    if (form.id == "admin-product-form") {
         e.preventDefault();
         fetch("/Admin/AddProduct", {
             method: 'POST',
             body: new FormData(form)
         }).then(r => r.json())
             .then(j => {
-                    console.log(j);
+                console.log(j);
             });
     }
 });

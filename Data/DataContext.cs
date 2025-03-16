@@ -33,7 +33,7 @@ namespace ASP_spr321.Data
             modelBuilder.Entity<Entities.Category>()
                 .HasOne(c => c.ParentCategory)
                 .WithMany()
-                .HasForeignKey(p => p.ParentId);
+                .HasForeignKey(c => c.ParentId);
 
             modelBuilder.Entity<Entities.Category>()
                 .HasIndex(c => c.Slug)
