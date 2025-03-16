@@ -36,9 +36,10 @@ namespace ASP_spr321.Controllers
 
         public FileResult Image([FromRoute] String id)
         {
-            return File(
-                System.IO.File.ReadAllBytes(
-                    _storageService.GetRealPath(id)),
+            byte[] fileContents = System.IO.File.ReadAllBytes(
+                                _storageService.GetRealPath(id));
+            return base.File(
+                fileContents,
                 "image/jpeg"
             );
         }

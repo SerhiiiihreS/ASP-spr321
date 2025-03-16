@@ -61,18 +61,51 @@ namespace ASP_spr321.Controllers
                     formModel
                     .Images
                     .Select(img => _storageService.SaveFile(img))
-                ),
+                )
             };
-            _dataContext.Products.Add(product);
-            try
+            if (String.IsNullOrEmpty(product.Name) && String.IsNullOrEmpty(product.Description) && String.IsNullOrEmpty(product.Slug) 
+                   && price<=0 && product.Stock<=0)
             {
-                _dataContext.SaveChanges();
+                return Json(new { status = 400, message = "Поля пусті!" });
             }
-            catch
+            else
             {
-                // _storageService.DeleteFile(category.ImageUrl)
+                if (String.IsNullOrEmpty(product.Name) || String.IsNullOrEmpty(product.Description) || String.IsNullOrEmpty(product.Slug) || price <= 0 || product.Stock <= 0)
+                {
+                    return Json(new { status = 401, message = "Не всі поля заповнені!" });
+                }
+                if (String.IsNullOrEmpty(product.Name) && String.IsNullOrEmpty(product.Description) || String.IsNullOrEmpty(product.Slug) || price <= 0 || product.Stock <= 0)
+                {
+                    return Json(new { status = 401, message = "Не всі поля заповнені!" });
+                }
+                if (String.IsNullOrEmpty(product.Name) || String.IsNullOrEmpty(product.Description) && String.IsNullOrEmpty(product.Slug) || price <= 0 || product.Stock <= 0)
+                {
+                    return Json(new { status = 401, message = "Не всі поля заповнені!" });
+                }
+                if (String.IsNullOrEmpty(product.Name) || String.IsNullOrEmpty(product.Description) || String.IsNullOrEmpty(product.Slug) && price <= 0 || product.Stock <= 0)
+                {
+                    return Json(new { status = 401, message = "Не всі поля заповнені!" });
+                }
+                if (String.IsNullOrEmpty(product.Name) || String.IsNullOrEmpty(product.Description) || String.IsNullOrEmpty(product.Slug) || price <= 0 && product.Stock <= 0)
+                {
+                    return Json(new { status = 401, message = "Не всі поля заповнені!" });
+                }
+                else
+                {
+                     _dataContext.Products.Add(product);
+                    try
+                    {
+                        _dataContext.SaveChanges();
+                    }
+                    catch
+                    {
+                        //_storageService.DeleteFile(product.ImageUrl)
+                    }
+                    return Json(product);
+
+                }
+
             }
-            return Json(product);
         }
 
         [HttpPost]

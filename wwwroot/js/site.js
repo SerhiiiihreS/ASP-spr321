@@ -71,7 +71,21 @@ document.addEventListener('submit', e => {
             body: new FormData(form)
         }).then(r => r.json())
             .then(j => {
-                console.log(j);
+                if (j.status == 400) {
+                    console.log(j.message);
+                    e.preventDefault();
+                    alert(`${j.message}`);
+
+                }
+                else if (j.status == 401) {
+                    console.log(j.message);
+                    e.preventDefault();
+                    alert(`${j.message}`);
+                }
+
+                else {
+                    window.location.reload();
+                }
             });
     }
 });
