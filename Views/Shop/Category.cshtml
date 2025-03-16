@@ -1,5 +1,7 @@
 ﻿@model ASP_spr321.Models.Shop.ShopCategoryViewModel
 
+<h3><a href="/Shop/Index">1.В</a></h3>
+
 @if(Model.Category==null){
 	<div class="text-center">
 		<h1 class="display-4">Запитана категорія не знайдена</h1>
@@ -8,6 +10,8 @@
 }
 else
 {
+	
+	
 	<div class="text-center">
 		<h1 class="display-4"> @Model.Category.Name</h1>
 	</div>
@@ -19,4 +23,7 @@ else
 			@Html.DisplayFor(m => product, "ProductCard")
 		}
 	</div>
+
+
+
 }

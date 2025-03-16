@@ -19,7 +19,7 @@ namespace ASP_spr321.Models.Admin
             public String? Slug { get; set; } = null!;
 
             [FromForm(Name = "product-price")]
-            public String Price { get; set; } = "";
+            public double Price { get; set; } 
 
             [FromForm(Name = "product-stock")]
             public int Stock { get; set; }

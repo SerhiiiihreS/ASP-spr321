@@ -36,7 +36,7 @@ namespace ASP_spr321.Controllers
 
         public FileResult Image([FromRoute] String id)
         {
-            byte[] fileContents = System.IO.File.ReadAllBytes(
+            var fileContents = System.IO.File.ReadAllBytes(
                                 _storageService.GetRealPath(id));
             return base.File(
                 fileContents,

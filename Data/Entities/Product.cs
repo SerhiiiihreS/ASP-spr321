@@ -15,5 +15,7 @@ namespace ASP_spr321.Data.Entities
         public double Price { get; set; } 
         public int     Stock { get; set; } = 0;
         public Category Category { get; set; } = null!;
+
+
     }
 }

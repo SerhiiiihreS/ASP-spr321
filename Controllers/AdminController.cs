@@ -37,17 +37,18 @@ namespace ASP_spr321.Controllers
         }
 
         [HttpPost]
-        public JsonResult AddProduct(ProductFormModel formModel)
+        public JsonResult AddProduct(ProductFormModel formModel, double price)
         {
-            double price;
-            try
-            {
-                price = double.Parse(formModel.Price, System.Globalization.CultureInfo.InvariantCulture);
-            }
-            catch
-            {
-                price = double.Parse(formModel.Price.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
-            }
+
+                //try
+                //{
+                //    price = double.Parse(formModel.Price, System.Globalization.CultureInfo.InvariantCulture);
+                //}
+                //catch
+                //{
+                //    price = double.Parse(formModel.Price.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+                //}
+           
             Product product = new()
             {
                 Id = Guid.NewGuid(),
@@ -55,7 +56,7 @@ namespace ASP_spr321.Controllers
                 Name = formModel.Name,
                 Description = formModel.Description,
                 Slug = formModel.Slug,
-                Price = price,
+                Price = formModel.Price,
                 Stock = formModel.Stock,
                 ImagesCsv = String.Join(',',
                     formModel
@@ -64,29 +65,25 @@ namespace ASP_spr321.Controllers
                 )
             };
             if (String.IsNullOrEmpty(product.Name) && String.IsNullOrEmpty(product.Description) && String.IsNullOrEmpty(product.Slug) 
-                   && price<=0 && product.Stock<=0)
+                   && product.Stock<=0)
             {
                 return Json(new { status = 400, message = "Поля пусті!" });
             }
             else
             {
-                if (String.IsNullOrEmpty(product.Name) || String.IsNullOrEmpty(product.Description) || String.IsNullOrEmpty(product.Slug) || price <= 0 || product.Stock <= 0)
+                if (String.IsNullOrEmpty(product.Name) || String.IsNullOrEmpty(product.Description) || String.IsNullOrEmpty(product.Slug) || product.Stock <= 0)
                 {
                     return Json(new { status = 401, message = "Не всі поля заповнені!" });
                 }
-                if (String.IsNullOrEmpty(product.Name) && String.IsNullOrEmpty(product.Description) || String.IsNullOrEmpty(product.Slug) || price <= 0 || product.Stock <= 0)
+                if (String.IsNullOrEmpty(product.Name) && String.IsNullOrEmpty(product.Description) || String.IsNullOrEmpty(product.Slug)  || product.Stock <= 0)
                 {
                     return Json(new { status = 401, message = "Не всі поля заповнені!" });
                 }
-                if (String.IsNullOrEmpty(product.Name) || String.IsNullOrEmpty(product.Description) && String.IsNullOrEmpty(product.Slug) || price <= 0 || product.Stock <= 0)
+                if (String.IsNullOrEmpty(product.Name) || String.IsNullOrEmpty(product.Description) && String.IsNullOrEmpty(product.Slug) || product.Stock <= 0)
                 {
                     return Json(new { status = 401, message = "Не всі поля заповнені!" });
                 }
-                if (String.IsNullOrEmpty(product.Name) || String.IsNullOrEmpty(product.Description) || String.IsNullOrEmpty(product.Slug) && price <= 0 || product.Stock <= 0)
-                {
-                    return Json(new { status = 401, message = "Не всі поля заповнені!" });
-                }
-                if (String.IsNullOrEmpty(product.Name) || String.IsNullOrEmpty(product.Description) || String.IsNullOrEmpty(product.Slug) || price <= 0 && product.Stock <= 0)
+                if (String.IsNullOrEmpty(product.Name) || String.IsNullOrEmpty(product.Description) || String.IsNullOrEmpty(product.Slug)  && product.Stock <= 0)
                 {
                     return Json(new { status = 401, message = "Не всі поля заповнені!" });
                 }
