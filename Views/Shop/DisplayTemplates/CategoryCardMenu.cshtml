@@ -1,14 +1,13 @@
-﻿ @model ASP_spr321.Data.Entities.Product
+﻿ @model ASP_spr321.Data.Entities.Category
 
 
 <div class="col">
-	<a class=" nav-link  h-10" asp-controller="Shop" asp-action="Category" asp-route-id="@Model.Slug">
+	<a class=" nav-link text-dark h-100" style="height:70%;width:80%;border-radius:10%;border:0,5ex solid green;" asp-controller="Shop" asp-action="Category" asp-route-id="@Model.Slug">
 		<div class="card h-100">
-			<img src="/Shop/Image/@(Model.Category.ImageUrl)" alt="Image" class="card-img-top" />
-			<div class="card-body">
-				<h5 class="card-title">@Model.Category.Name</h5>
-				<p class="card-text">@Model.Category.Description</p>
-			</div>
+			<img src="/Shop/Image/@(Model.ImageUrl)" alt="Image" class="card-img-top" style="border-radius:15%;" />
+			@* <div class="card-body"> *@
+			@* 	<h9 class="card-title">@Model.Name</h9> *@
+			@* </div> *@
 		</div>
 	</a>
 

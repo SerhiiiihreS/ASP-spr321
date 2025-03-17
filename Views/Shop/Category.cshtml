@@ -1,6 +1,5 @@
 ﻿@model ASP_spr321.Models.Shop.ShopCategoryViewModel
 
-<h3><a href="/Shop/Index">1.В</a></h3>
 
 @if(Model.Category==null){
 	<div class="text-center">
@@ -10,20 +9,31 @@
 }
 else
 {
-	
-	
 	<div class="text-center">
 		<h1 class="display-4"> @Model.Category.Name</h1>
 	</div>
+	<div style="display:flex;align-content:flex-start;">
+		<div class="cat2" style="width:15%;height:15%; background-color:chocolate">
+			@foreach (var category in Model.Categories)
+			{
 
-	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-
-		@foreach (var product in Model.Category.Products)
-		{
-			@Html.DisplayFor(m => product, "ProductCard")
-		}
+				@Html.DisplayFor(m => category, "CategoryCardMenu")
+			}
+		</div>
+		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" style="width:95%;height:60%;">
+			@foreach (var product in Model.Category.Products)
+			{
+				@Html.DisplayFor(m => product, "ProductCard")
+			}
+		</div>
 	</div>
+	
+		
+		
 
-
+	
+		
+	
+	
 
 }

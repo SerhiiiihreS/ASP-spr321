@@ -25,10 +25,11 @@ namespace ASP_spr321.Controllers
         {
             ShopCategoryViewModel viewModel = new()
             {
+                Categories = _dataContext.Categories.ToList(),
                 Category = _dataContext
                 .Categories
-                .Include(c=>c.Products)
-                .FirstOrDefault(c=>c.Slug==id)
+                .Include(c => c.Products)
+                .FirstOrDefault(c => c.Slug == id)
             };
 
             return View(viewModel);
