@@ -2,13 +2,12 @@
 
 
 <div class="col">
-	<a class=" nav-link text-dark h-100" style="height:70%;width:80%;border-radius:10%;border:0,5ex solid green;" asp-controller="Shop" asp-action="Category" asp-route-id="@Model.Slug">
+	<a class=" nav-link text-dark h-100" style="height:70%;width:60%;border:0,5ex solid green;" asp-controller="Shop" asp-action="Category" asp-route-id="@Model.Slug">
 		<div class="card h-100">
-			<img src="/Shop/Image/@(Model.ImageUrl)" alt="Image" class="card-img-top" style="border-radius:15%;" />
-			@* <div class="card-body"> *@
-			@* 	<h9 class="card-title">@Model.Name</h9> *@
-			@* </div> *@
+			<img src="/Shop/Image/@(Model.ImageUrl)" alt="Image" class="card-img-top" />
+			<div class="card-body"> 
+				<p class="card-title" style="font-size:1ex" >@Model.Name</p>
+			</div>
 		</div>
 	</a>
-
 </div>
