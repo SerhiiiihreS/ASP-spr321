@@ -13,6 +13,7 @@ namespace ASP_spr321.Data.Entities
 
         public Category ParentCategory { get; set; }=null!;
         public List<Product> Products { get; set; } = [];
+        public Product Product { get; set; } = null!;
 
     }
 }

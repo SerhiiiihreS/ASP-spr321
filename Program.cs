@@ -1,6 +1,7 @@
 using ASP_SPR311.Services.Kdf;
 using ASP_spr321.Data;
 using ASP_spr321.Middleware;
+using ASP_spr321.Models;
 using ASP_spr321.Services.Kdf;
 using ASP_spr321.Services.OTP;
 using ASP_spr321.Services.Storage;
@@ -43,6 +44,11 @@ builder.Services.AddDbContext<DataContext>(
             builder.Configuration
             .GetConnectionString("LocalMs"))
     );
+
+builder.Services.AddControllers(options =>
+{
+    options.ModelBinderProviders.Insert(0, new DoubleBinderProvider());
+});
 
 var app = builder.Build();
 
