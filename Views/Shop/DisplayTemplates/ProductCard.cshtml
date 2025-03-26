@@ -2,7 +2,7 @@
 
 
 <div class="col" >
-    <a class="nav-link text-dark h-100" asp-controller="Shop" asp-action="Product" asp-route-id="@Model.Slug ?? Model.Id.ToString())">
+    <a class="nav-link text-dark h-100" asp-controller="Shop" asp-action="Product" asp-route-id="@(Model.Slug ?? Model.Id.ToString())">
         <div class="card h-100">
             <div >
                 <img src="/Shop/Image/@(Model.ImagesCsv.Split(',').First())" alt="Image" class="card-img-top" />

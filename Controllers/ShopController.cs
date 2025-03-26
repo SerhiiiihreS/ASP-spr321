@@ -45,13 +45,13 @@ namespace ASP_spr321.Controllers
             ShopProductViewModel viewModel = new()
             {
                 Product = _dataContext
-                    .Products
-                    .Include(p => p.Category)
-                    .FirstOrDefault(p => p.Slug == id || p.Id.ToString() == id),
+                .Products
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.Slug == id || p.Id.ToString() == id),
 
                 BreadCrumbs = new() {
-                new BreadCrumb() { Title = "Домашня", Url = "/" },
-                new BreadCrumb() { Title = "Крамниця", Url = $"/{controllerName}" },
+                    new BreadCrumb() { Title = "Домашня", Url = "/" },
+                    new BreadCrumb() { Title = "Крамниця", Url = $"/{controllerName}" },
                 }
             };
             if (viewModel.Product != null)
@@ -69,8 +69,7 @@ namespace ASP_spr321.Controllers
                         Url = $"/{controllerName}/{nameof(Product)}/{viewModel.Product.Slug ?? viewModel.Product.Id.ToString()}"
                     });
             }
-
-            return View(viewModel); 
+            return View(viewModel);
         }
 
         public ViewResult Cart()
@@ -90,64 +89,74 @@ namespace ASP_spr321.Controllers
         }
 
 
+
         [HttpPost]
-        public JsonResult AddToCart([FromForm] String productId, 
-            [FromForm] String uaId)
+        public JsonResult AddToCart([FromForm] String productId, [FromForm] String uaId)
         {
-            Product? product=_dataContext.Products
-                .FirstOrDefault(p => p.Id.ToString()
-                ==productId);
-            if (product == null) {
-                return Json(new { Status = 404 });
-            }
-            Cart? cart = _dataContext.Carts
-                .FirstOrDefault(c => c.UserAccessId
-                .ToString() == uaId);
+            if (productId.Length == 36 && productId[8] == '-' && productId[13] =='-' && productId[18] == '-' && productId[23] == '-' 
+                && uaId.Length == 36 && uaId[8] == '-' && uaId[13] == '-' && uaId[18] == '-' && uaId[23] == '-')
+            {
+                Product? product = _dataContext.Products
+               .FirstOrDefault(p => p.Id.ToString() == productId);
+                if (product == null)
+                {
+                    return Json(new { Status = 404 });
+                }
+                /* Перевіряємо чи є в користувача незакритий кошик.
+                   якщо є, то доповнюємо його, якщо немає - створюємо новий. */
+                Cart? cart = _dataContext.Carts
+                    .FirstOrDefault(c => c.UserAccessId.ToString() == uaId);
                 if (cart == null)
-                 {
+                {
                     cart = new Cart()
                     {
                         Id = Guid.NewGuid(),
                         UserAccessId = Guid.Parse(uaId),
                         OpenAt = DateTime.Now,
                     };
-                _dataContext.Carts.Add(cart);
+                    _dataContext.Carts.Add(cart);
                 }
-                
-            CartItem? cartItem = _dataContext.CartItems
-                .FirstOrDefault(ci => ci.CartId == cart.Id &&
-                ci.ProductId.ToString() == productId);
-            if (cartItem != null)
-            {
-                cartItem.Quantity += 1;
-                cartItem.Price += product.Price;
-            }
-            else
-            {
-                cartItem = new CartItem()
+                // Те ж саме для CartItem
+                CartItem? cartItem = _dataContext.CartItems
+                    .FirstOrDefault(ci => ci.CartId == cart.Id &&
+                        ci.ProductId.ToString() == productId);
+                if (cartItem != null)
                 {
-                    Id = Guid.NewGuid(),
-                    CartId = cart.Id,
-                    ProductId = product.Id,
-                    Quantity = 1,
-                    Price = product.Price,
-                };
-                _dataContext.CartItems.Add(cartItem);
+                    cartItem.Quantity += 1;
+                    cartItem.Price += product.Price;   // перерахунок по акціях
+                }
+                else
+                {
+                    cartItem = new CartItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        CartId = cart.Id,
+                        ProductId = product.Id,
+                        Quantity = 1,
+                        Price = product.Price,   // перерахунок по акціях
+                    };
+                    _dataContext.CartItems.Add(cartItem);
+                }
+                cart.Price += product.Price;   // перерахунок по акціях
+
+                _dataContext.SaveChanges();
+                return Json(new { Status = 200, message = "Формати відповідають UUID!" });
+
+            } 
+            else{
+                return Json(new { Status = 404, message = "Формати не відповідають UUID!" });
             }
-            cart.Price += product.Price;
 
-            _dataContext.SaveChanges();
-
-            return Json(new { Status=200});
+            
+            
         }
-       
+
         public FileResult Image([FromRoute] String id)
         {
-            var fileContents = System.IO.File.ReadAllBytes(
-                                _storageService.GetRealPath(id));
-            return base.File(
-                fileContents,
-                "image/jpeg"
+            return File(
+                System.IO.File.ReadAllBytes(
+                    _storageService.GetRealPath(id)),
+                "image/jpeg", false
             );
         }
     }

@@ -115,7 +115,13 @@ function addToCartClick(e) {
         body: `productId=${productId}&uaId=${uaId}`
     }).then(r => r.json()).then(j => {
         if (j.status == 200) {
-            alert("Додано до кошику");
+            console.log(j.message);
+            alert("Додано до кошику!" + '\n ' + '\n ' + `${j.message}`);
+        }
+        else if (j.status == 404) {
+            console.log(j.message);
+            e.preventDefault();
+            alert(`${j.message}`);
         }
         else {
             alert("Помилка додавання");

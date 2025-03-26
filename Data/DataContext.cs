@@ -24,6 +24,7 @@ namespace ASP_spr321.Data
             modelBuilder.Entity<Entities.CartItem>()
                  .HasOne(ci => ci.Cart)
                  .WithMany(c => c.CartItems);
+
             modelBuilder.Entity<Entities.CartItem>()
                 .HasOne(ci => ci.Product)
                 .WithMany();

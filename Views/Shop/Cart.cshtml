@@ -14,5 +14,16 @@
 }
 else
 {
-    <h2>У вашему кошику @(Model.Cart.CartItems.Count) позицій</h2>
+   if ( Model.Cart.CartItems.Count==1)
+   {
+        <h2>У вашему кошику @(Model.Cart.CartItems.Count) позиція</h2>
+   }
+   if (Model.Cart.CartItems.Count > 1 && Model.Cart.CartItems.Count < 5)
+   {
+        <h2>У вашему кошику @(Model.Cart.CartItems.Count) позиції</h2>
+   }
+   if (Model.Cart.CartItems.Count >=5 )
+   {
+        <h2>У вашему кошику @(Model.Cart.CartItems.Count) позицій</h2>
+   }
 }

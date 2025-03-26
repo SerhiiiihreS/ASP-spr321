@@ -13,7 +13,7 @@ namespace ASP_spr321.Data.Entities
 
         [Column(TypeName = "decimal(5, 2)")]
         public double Price { get; set; } 
-        public int     Stock { get; set; } = 0;
+        public int     Stock { get; set; } = 1;
         public Category Category { get; set; } = null!;
 
 
