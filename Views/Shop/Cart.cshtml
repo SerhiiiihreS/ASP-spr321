@@ -7,23 +7,29 @@
 <div class="text-center">
     <h1 class="display-4">Мій кошик</h1>
 </div>
+@if(Model.Cart.UserAccess.Id == null){
+    <h2>Авторизуйтесь для створення замовлення!</h2>
+}
+else{
+        @if (Model.Cart == null)
+        {
+            <h2>У вас немає активного кошику</h2>
+        }
+        else
+        {
+            if (Model.Cart.CartItems.Count == 1)
+            {
+                <h2>У вашему кошику @(Model.Cart.CartItems.Count) позиція</h2>
+            }
+            if (Model.Cart.CartItems.Count > 1 && Model.Cart.CartItems.Count < 5)
+            {
+                <h2>У вашему кошику @(Model.Cart.CartItems.Count) позиції</h2>
+            }
+            if (Model.Cart.CartItems.Count >= 5)
+            {
+                <h2>У вашему кошику @(Model.Cart.CartItems.Count) позицій</h2>
+            }
+    }
 
-@if(Model.Cart == null)
-{
-    <h2>У вас немає активного кошику</h2>
 }
-else
-{
-   if ( Model.Cart.CartItems.Count==1)
-   {
-        <h2>У вашему кошику @(Model.Cart.CartItems.Count) позиція</h2>
-   }
-   if (Model.Cart.CartItems.Count > 1 && Model.Cart.CartItems.Count < 5)
-   {
-        <h2>У вашему кошику @(Model.Cart.CartItems.Count) позиції</h2>
-   }
-   if (Model.Cart.CartItems.Count >=5 )
-   {
-        <h2>У вашему кошику @(Model.Cart.CartItems.Count) позицій</h2>
-   }
-}
+
