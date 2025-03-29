@@ -94,7 +94,53 @@ document.addEventListener('DOMContentLoaded', e => {
     for (let fab of document.querySelectorAll('[data-cart-product-id]')) {
         fab.addEventListener('click', addToCartClick);
     }
+    for (let btn of document.querySelectorAll('[data-cart-decrement]')) {
+        btn.addEventListener('click', addToCartClick);
+    }
+    for (let btn of document.querySelectorAll('[data-cart-increment]')) {
+        btn.addEventListener('click', addToCartClick);
+    }
+    for (let btn of document.querySelectorAll('[data-cart-delete]')) {
+        btn.addEventListener('click', addToCartClick);
+    }
 });
+
+function incCartClick(e) {
+    const productId = e.target.closest('[data-cart-increment]').getAttribute('data-cart-increment');
+    console.log("++", cartId);
+    modifyCartItem(cartId, +q);
+}
+function decCartClick(e) {
+    const productId = e.target.closest('[data-cart-decrement]').getAttribute('data-cart-decrement');
+    console.log("--", cartId);
+    modifyCartItem(cartId, -q);
+}
+function deleteCartClick(e) {
+    const productId = e.target.closest('[data-cart-delete]').getAttribute('data-cart-delete');
+    const q = e.target.closest('.cart - item - row').querySelector('[data-cart-quantity]').innerText;
+    console.log("XX", cartId);
+    modifyCartItem(cartId, q);
+}
+
+function modifyCartItem(cartId, delta)
+{
+    fetch(`/Shop/modifyCartItem?cartId = ${cartId}&delta=${delta}`, {
+        method:'PUT'
+    }).then(r => r.json())
+        .then(j => {
+            if (j.status == 200) {
+                window.location.reload();
+            }
+            else if (j.status == 422) {
+                alert("Недостатня кількість на складі!")
+            }
+            else {
+                console.log(j.message);
+                alert("Помилка, повторіть пізніше")
+            }
+
+        })
+}
 
 function addToCartClick(e) {
     e.stopPropagation();

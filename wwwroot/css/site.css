@@ -131,5 +131,9 @@ body.header {
         text-shadow: 1px 1px #c60;
     }
 
-    
+.cart-product-img {
+    width:99%;
+    max-height:5em;
+    max-width:7em;
+}  
 

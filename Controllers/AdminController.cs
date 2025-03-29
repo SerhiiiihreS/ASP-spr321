@@ -39,16 +39,16 @@ namespace ASP_spr321.Controllers
         [HttpPost]
         public JsonResult AddProduct(ProductFormModel formModel, double price)
         {
+            //decimal price;
+            //try
+            //{
+            //    price = decimal.Parse(formModel.Price, System.Globalization.CultureInfo.InvariantCulture);
+            //}
+            //catch
+            //{
+            //    price = decimal.Parse(formModel.Price.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+            //}
 
-                //try
-                //{
-                //    price = double.Parse(formModel.Price, System.Globalization.CultureInfo.InvariantCulture);
-                //}
-                //catch
-                //{
-                //    price = double.Parse(formModel.Price.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
-                //}
-           
             Product product = new()
             {
                 Id = Guid.NewGuid(),
