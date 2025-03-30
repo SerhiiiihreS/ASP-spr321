@@ -166,50 +166,52 @@ namespace ASP_spr321.Controllers
             
             
         }
-        
-        [HttpPut]
 
+
+
+        [HttpPut]
         public JsonResult ModifyCartItem([FromQuery] String cartId, [FromQuery] int delta)
         {
             if (delta == 0)
             {
-                return Json(new { Status = 400,Message="No action needed for 0 delta" });
+                return Json(new { Status = 400, Message = "No action needed for 0 delta" });
             }
             Guid cartGuid;
-            try
-            { cartGuid = Guid.Parse(cartId); }
-            catch { return Json(new { Status = 400, Message = "Invalid cartId format" }); }
+            try { cartGuid = Guid.Parse(cartId); }
+            catch { return Json(new { Status = 400, Message = "Invalid cartId format: UUID expected" }); }
 
-            CartItem cartItem=_dataContext.CartItems
+            CartItem? cartItem = _dataContext.CartItems
                 .Include(ci => ci.Product)
                 .Include(ci => ci.Cart)
-                .FirstOrDefault(ci=>ci.Id== cartGuid);
-            if (cartItem == null) 
+                .FirstOrDefault(ci => ci.Id == cartGuid);
+            if (cartItem == null)
             {
                 return Json(new { Status = 404, Message = "No item with requested cartId" });
             }
-            int newQuantity=cartItem.Quantity+delta;
-            if (newQuantity < 0) 
+            int newQuantity = cartItem.Quantity + delta;
+            if (newQuantity < 0)
             {
                 return Json(new { Status = 400, Message = "Invalid delta: negative total quantity" });
             }
-            if (newQuantity > cartItem.Product.Stock) 
+            if (newQuantity > cartItem.Product.Stock)
             {
-                return Json(new { Status = 422, Message = "Delta too large" });
+                return Json(new { Status = 422, Message = "Delta too large: stock limit exceeded" });
             }
-            if (newQuantity == 0) {
-                cartItem.Cart.Price-=cartItem.Price;
+            if (newQuantity == 0)
+            {
+                cartItem.Cart.Price -= cartItem.Price;
                 _dataContext.CartItems.Remove(cartItem);
             }
             else
             {
-                cartItem.Cart.Price += delta * cartItem.Product.Price;
-                cartItem.Price += delta * cartItem.Product.Price;
+                cartItem.Cart.Price += delta * cartItem.Product.Price;  // + Actions
+                cartItem.Price += delta * cartItem.Product.Price;  // + Actions
                 cartItem.Quantity = newQuantity;
             }
             _dataContext.SaveChanges();
             return Json(new { Status = 200, Message = "Modifed" });
         }
+
         public FileResult Image([FromRoute] String id)
         {
             return File(
