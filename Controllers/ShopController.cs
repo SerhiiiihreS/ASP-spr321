@@ -143,6 +143,7 @@ namespace ASP_spr321.Controllers
                 {
                     cartItem.Quantity += 1;
                     cartItem.Price += product.Price;   // перерахунок по акціях
+                    cart.sumQw += cartItem.Quantity;
                 }
                 else
                 {
@@ -153,8 +154,9 @@ namespace ASP_spr321.Controllers
                         ProductId = product.Id,
                         Quantity = 1,
                         Price = product.Price,   // перерахунок по акціях
+
                     };
-                    
+                    cart.sumQw += cartItem. Quantity;
                     _dataContext.CartItems.Add(cartItem);
                 }
                 cart.Price += product.Price;   // перерахунок по акціях
@@ -190,10 +192,11 @@ namespace ASP_spr321.Controllers
                 .FirstOrDefault(ci => ci.Id == cartGuid);
             if (cartItem == null)
             {
+                cartItem.Cart.sumQw = 0;
                 return Json(new { Status = 404, Message = "No item with requested cartId" });
             }
             int newQuantity = cartItem.Quantity + delta;
-            
+            cartItem.Cart.sumQw += delta;
             if (newQuantity < 0)
             {
                 return Json(new { Status = 400, Message = "Invalid delta: negative total quantity" });
