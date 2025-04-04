@@ -74,6 +74,7 @@ namespace ASP_spr321.Controllers
 
         public ViewResult Cart()
         {
+
             String? uaId = HttpContext.User.Claims
                 .FirstOrDefault(c => c.Type == ClaimTypes.Sid)?.Value;
             Cart? cart = _dataContext
@@ -84,6 +85,7 @@ namespace ASP_spr321.Controllers
 
             ShopCartViewModel viewModel = new()
             {
+                Products = _dataContext.Products.ToList(),
                 Cart =cart==null? null:
                     cart with {
                         CartItems = cart.CartItems.Select(ci => ci with
@@ -113,6 +115,7 @@ namespace ASP_spr321.Controllers
                 && uaId.Length == 36 && uaId[8] == '-' && uaId[13] == '-' && uaId[18] == '-' && uaId[23] == '-')
             {
                 Product? product = _dataContext.Products
+
                .FirstOrDefault(p => p.Id.ToString() == productId);
                 if (product == null)
                 {
@@ -151,10 +154,11 @@ namespace ASP_spr321.Controllers
                         Quantity = 1,
                         Price = product.Price,   // перерахунок по акціях
                     };
+                    
                     _dataContext.CartItems.Add(cartItem);
                 }
                 cart.Price += product.Price;   // перерахунок по акціях
-
+                
                 _dataContext.SaveChanges();
                 return Json(new { Status = 200, message = "Формати відповідають UUID!" });
 
@@ -189,6 +193,7 @@ namespace ASP_spr321.Controllers
                 return Json(new { Status = 404, Message = "No item with requested cartId" });
             }
             int newQuantity = cartItem.Quantity + delta;
+            
             if (newQuantity < 0)
             {
                 return Json(new { Status = 400, Message = "Invalid delta: negative total quantity" });
@@ -207,6 +212,7 @@ namespace ASP_spr321.Controllers
                 cartItem.Cart.Price += delta * cartItem.Product.Price;  // + Actions
                 cartItem.Price += delta * cartItem.Product.Price;  // + Actions
                 cartItem.Quantity = newQuantity;
+                
             }
             _dataContext.SaveChanges();
             return Json(new { Status = 200, Message = "Modifed" });

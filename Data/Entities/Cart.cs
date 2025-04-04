@@ -10,10 +10,11 @@ namespace ASP_spr321.Data.Entities
         public DateTime      OpenAt       { get; set; }
         public DateTime?     CloseAt      { get; set; }
         public int?          IsCanceled   { get; set; }
+        public int sumQw { get; set; } = 0;
 
         [Column(TypeName = "decimal(15, 2)")]
         public decimal Price        { get; set; }
-
+         
         public List<CartItem> CartItems   { get; set; } = new();
         public UserAccess UserAccess { get; set; } = null!;
 

@@ -11,24 +11,43 @@
     <h2>Авторизуйтесь для створення замовлення!</h2>
 }
 else{
-        @if (Model.Cart == null)
+    @if (Model.Cart == null)
+    {
+        <h2>У вас немає активного кошику</h2>
+    }
+    else
+    {
+        if (Model.Cart.CartItems.Count == 1)
         {
-            <h2>У вас немає активного кошику</h2>
-        }
-        else
-        {
-            if (Model.Cart.CartItems.Count == 1)
-
+            <hr />
+            
+            @foreach(var item in Model.Cart.CartItems)
             {
-                @foreach(var item in Model.Cart.CartItems){
-                    @Html.DisplayFor(m=>item,"CartItem")
-                }
+                @Html.DisplayFor(m=>item,"CartItem")
+       }
                 <hr/>
                 <div class="row">
-                    <div class=" col offset-4 col-1">Разом</div>
-                <div class="col col-1">@Model.Cart.Price.ToString("0.00")</div>
+                    <h4>У вашему кошику @(Model.Cart.CartItems.Count) позиція</h4>
+                <h5>Кількість:&nbsp @Model.Cart.sumQw.ToString("0")</h5>
+                <h5>Разом:&nbsp @Model.Cart.Price.ToString("0.00")</h5>
+                <div style="display:flex;justify-content:space-around;width:100%;">
+                    <button class=" btn" style="border:1px solid green;border:30%;background:green;font-size:1.2em;" data-cart-delete="@Model.Cart">Придбати</button>
+                    <button class=" btn" style="border:1px solid red;border:30%;background:red;font-size:1.2em;" data-cart-delete="@Model.Cart">Скасувати</button>
                 </div>
-                <h2>У вашему кошику @(Model.Cart.CartItems.Count) позиція</h2>
+                
+                </div>
+                <hr />
+                <div>
+                    <h6>Вас також може зацікавити!</h6>
+                    <div class="overflow-scroll">
+                    @foreach (var product in Model.Products)
+                    {
+
+                        @Html.DisplayFor(m => product, "ProductCardMini")
+                    }
+                    </div>
+                </div>
+                <hr />
             }
             if (Model.Cart.CartItems.Count > 1 && Model.Cart.CartItems.Count < 5)
             {
@@ -38,10 +57,27 @@ else{
             }
             <hr />
             <div class="row">
-                <div class="col offset-4 col-1">Разом</div>
-                <div class="col col-1">@Model.Cart.Price.ToString("0.00")</div>
+                <h4>У вашему кошику @(Model.Cart.CartItems.Count) позиції</h4>
+                <h5>Кількість:&nbsp @Model.Cart.sumQw.ToString("0")</h5>
+                <h5>Разом:&nbsp @Model.Cart.Price.ToString("0.00")</h5>
+                <div style="display:flex;justify-content:space-around;width:100%;">
+                    <button class=" btn" style="border:1px solid green;border:30%;background:green;font-size:1.2em;" data-cart-delete="@Model.Cart">Придбати</button>
+                    <button class=" btn" style="border:1px solid red;border:30%;background:red;font-size:1.2em;" data-cart-delete="@Model.Cart">Скасувати</button>
+                </div>
+
             </div>
-                <h2>У вашему кошику @(Model.Cart.CartItems.Count) позиції</h2>
+            <hr />
+            <div>
+                <h6>Вас також може зацікавити!</h6>
+                <div class="overflow-scroll">
+                    @foreach (var product in Model.Products)
+                    {
+
+                        @Html.DisplayFor(m => product, "ProductCardMini")
+                    }
+                </div>
+            </div>
+            <hr />
             }
             if (Model.Cart.CartItems.Count >= 5)
             {
@@ -51,10 +87,27 @@ else{
             }
             <hr />
             <div class="row">
-                <div class="col offset-4 col-1">Разом</div>
-                <div class="col col-1">@Model.Cart.Price.ToString("0.00")</div>
+                <h4>У вашему кошику @(Model.Cart.CartItems.Count) позицій</h4>
+                <h5>Кількість:&nbsp @Model.Cart.sumQw.ToString("0")</h5>
+                <h5>Разом:&nbsp @Model.Cart.Price.ToString("0.00")</h5>
+                <div style="display:flex;justify-content:space-around;width:100%;">
+                    <button class=" btn" style="border:1px solid green;border:30%;background:green;font-size:1.2em;" data-cart-delete="@Model.Cart">Придбати</button>
+                    <button class=" btn" style="border:1px solid red;border:30%;background:red;font-size:1.2em;" data-cart-delete="@Model.Cart">Скасувати</button>
+                </div>
+
             </div>
-                <h2>У вашему кошику @(Model.Cart.CartItems.Count) позицій</h2>
+            <hr />
+            <div>
+                <h6>Вас також може зацікавити!</h6>
+                <div class="overflow-scroll">
+                    @foreach (var product in Model.Products)
+                    {
+
+                        @Html.DisplayFor(m => product, "ProductCardMini")
+                    }
+                </div>
+            </div>
+            <hr />
             }
     }
 

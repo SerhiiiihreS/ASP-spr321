@@ -89,6 +89,7 @@ document.addEventListener('submit', e => {
             });
     }
 });
+
 document.addEventListener('DOMContentLoaded', e => {
     for (let fab of document.querySelectorAll('[data-cart-product-id]')) {
         fab.addEventListener('click', addToCartClick);

@@ -135,5 +135,16 @@ body.header {
     width:99%;
     max-height:5em;
     max-width:7em;
-}  
+}
 
+.overflow-scroll {
+    display: flex;
+    overflow-x: auto;
+    height: 20ex;
+}
+.img-mini {
+    height: 10ex;
+    width: 10ex;
+    border-radius:30%;
+    
+}
