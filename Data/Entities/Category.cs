@@ -2,7 +2,7 @@
 
 namespace ASP_spr321.Data.Entities
 {
-    public class Category
+    public record Category
     {
         public Guid Id { get; set; }
         public Guid? ParentId { get; set; }
