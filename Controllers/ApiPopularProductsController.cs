@@ -8,24 +8,21 @@ namespace ASP_spr321.Controllers
 {
     [Route("api/popularproduct")]
     [ApiController]
-    public class ApiPopularProductsController(DataContext dataContext) : ControllerBase
+    public class ApiPopularProductsController(DataAccessor dataAccessor) : ControllerBase
     {
-        private readonly DataContext _dataContext = dataContext;
+        private readonly DataAccessor _dataAcccessor = dataAccessor;
+
         [HttpGet]
-       public RestResponse Products()
-       {
-                return new()
-                {
-                    Service = "API Popular Products",
-                    DataType = "array",
-                    CacheTime = 600,
-                    Data = _dataContext.Products
-                .AsEnumerable()
-                .Select(c => c with { ImagesCsv = "http://localhost:5173/Shop/Image/" + c.ImagesCsv })
-                .ToList(),
-                };
-           
-       }
-    }
+        public RestResponse PopProducts()
+        {
+            return new()
+            {
+                Service = "API Products",
+                DataType = "array",
+                CacheTime = 600,
+                Data = _dataAcccessor.PopularProducts(),
+            };
+        }
+    } 
  }
 

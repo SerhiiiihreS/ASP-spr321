@@ -12,7 +12,8 @@ namespace ASP_spr321.Data
 
         public DbSet<Entities.Cart> Carts{ get; private set; }
         public DbSet<Entities.CartItem> CartItems{ get; private set; }
-       
+
+        public DbSet<Entities.AccessToken> AccessTokens { get; private set; }
 
         public DataContext(DbContextOptions options) : base(options)
         { }
@@ -20,6 +21,9 @@ namespace ASP_spr321.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("ASP");
+
+            modelBuilder.Entity<Entities.AccessToken>()
+                 .HasKey(t => t.Jti);
 
             modelBuilder.Entity<Entities.CartItem>()
                  .HasOne(ci => ci.Cart)

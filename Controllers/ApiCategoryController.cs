@@ -7,9 +7,9 @@ namespace ASP_spr321.Controllers
 {
     [Route("api/category")]
     [ApiController]
-    public class ApiCategoryController(DataContext dataContext) : ControllerBase
+    public class ApiCategoryController(DataAccessor dataAccessor) : ControllerBase
     {
-        private readonly DataContext _dataContext = dataContext;
+        private readonly DataAccessor _dataAcccessor = dataAccessor;
         [HttpGet]
         public RestResponse Categories()
         {
@@ -18,10 +18,18 @@ namespace ASP_spr321.Controllers
                 Service="API Products Categories",
                 DataType="array",
                 CacheTime=600,
-                Data = _dataContext.Categories
-                .AsEnumerable()
-                .Select(c => c with{ImageUrl= "http://localhost:5173/Shop/Image/" + c.ImageUrl })
-                .ToList(),
+                Data = _dataAcccessor.AllCategories(),
+            };
+        }
+        [HttpGet("{id}")]
+        public RestResponse Category(String id)
+        {
+            return new()
+            {
+                Service = "API Products Categories",
+                DataType = "object",
+                CacheTime = 600,
+                Data = _dataAcccessor.GetCategory(id),
             };
         }
     }

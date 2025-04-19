@@ -1,4 +1,5 @@
 ﻿using ASP_spr321.Data;
+using ASP_spr321.Data.Entities;
 using ASP_spr321.Models.Home;
 
 using ASP_spr321.Models.User;
@@ -6,14 +7,16 @@ using ASP_spr321.Services.Kdf;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using System.ComponentModel;
 using System.Text.Json;
 
 namespace ASP_spr311.Controllers
 {
-    public class UserController(DataContext dataContext, IKdfService kdfService) : Controller
+    public class UserController(DataContext dataContext, DataAccessor dataAccessor, IKdfService kdfService) : Controller
     {
         private const String signupFormKey = "UserSinnupFormModel";
         private readonly DataContext _dataContext = dataContext;
+        private readonly DataAccessor _dataAccessor = dataAccessor;
         private readonly IKdfService _kdfService=kdfService;
         public IActionResult Index()
         {
@@ -76,52 +79,18 @@ namespace ASP_spr311.Controllers
 
         public IActionResult Signin()
         {
-            // 'Basic' HTTP Authentication Scheme  https://datatracker.ietf.org/doc/html/rfc7617#section-2
-            // Дані автентифікації приходять у заголовку Authorization
-            // за схемою  Authentication: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
-            // де дані - Base64 закодована послідовність "login:password"
-            String authHeader = Request.Headers.Authorization.ToString();
-            if (String.IsNullOrEmpty(authHeader))
-            {
-                return Json(new { status = 401, message = "Authorization header required" });
-            }
-            String scheme = "Basic ";
-            if (!authHeader.StartsWith(scheme))
-            {
-                return Json(new { status = 401, message = $"Authorization scheme must be {scheme}" });
-            }
-            String credentials = authHeader[scheme.Length..];
-            String authData;
+            AccessToken accessToken;
             try
             {
-                authData = System.Text.Encoding.UTF8.GetString(
-                    Base64UrlTextEncoder.Decode(credentials)
-                );
+                accessToken = _dataAccessor.Authenticate(Request);
             }
-            catch
+            catch (Win32Exception ex)
             {
-                return Json(new { status = 401, message = $"Not valid Base64 code '{credentials}'" });
+                return Json(new { status = ex.ErrorCode, message = ex.Message });
             }
-            // authData == "login:password"
-            String[] parts = authData.Split(':', 2);
-            if (parts.Length != 2)
-            {
-                return Json(new { status = 401, message = $"Not valid credentials format (missing ':'?)" });
-            }
-            String login = parts[0];
-            String password = parts[1];
-            var userAccess = _dataContext.UserAccesses.FirstOrDefault(ua => ua.Login == login);
-            if (userAccess == null)
-            {
-                return Json(new { status = 401, message = "Введіть логін!" });
-            }
-            if (_kdfService.DerivedKey(password, userAccess.Salt) != userAccess.Dk && _kdfService.DerivedKey(password, userAccess.Salt) != null)
-            {
-                return Json(new { status = 401, message = "Введіть пароль!" });
-            }
-           
+
             // Зберігаємо у сесію відомості про автентифікацію
-            HttpContext.Session.SetString("userAccessId", userAccess.Id.ToString());
+            HttpContext.Session.SetString("userAccessId", accessToken.Sub.ToString());
 
             return Json(new { status = 200, message = "OK" });
         }

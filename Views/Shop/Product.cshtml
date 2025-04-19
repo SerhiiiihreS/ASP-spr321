@@ -22,7 +22,7 @@ else
             @foreach (var image in Model.Product.ImagesCsv
            .Split(',', StringSplitOptions.RemoveEmptyEntries))
             {
-                <img src="/Shop/Image/@image" alt="Image" class="img-fluid" />
+                <img src="@image" alt="Image" class="img-fluid" />
             }
 
         </div>

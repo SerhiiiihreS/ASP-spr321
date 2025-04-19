@@ -5,14 +5,16 @@ using ASP_spr321.Models.Shop;
 using ASP_spr321.Services.Storage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 
 namespace ASP_spr321.Controllers
 {
 
-    public class ShopController(DataContext dataContext, IStorageService storageService) : Controller
+    public class ShopController(DataAccessor dataAccessor, DataContext dataContext, IStorageService storageService) : Controller
     {
+        private readonly DataAccessor _dataAccessor = dataAccessor;
         private readonly DataContext _dataContext = dataContext;
         private readonly IStorageService _storageService = storageService;
 
@@ -20,7 +22,7 @@ namespace ASP_spr321.Controllers
         {
             ShopIndexViewModel viewModel = new()
             {
-                Categories = _dataContext.Categories.ToList()
+                Categories = _dataAccessor.AllCategories()
             };
 
             return View(viewModel);
@@ -29,11 +31,8 @@ namespace ASP_spr321.Controllers
         {
             ShopCategoryViewModel viewModel = new()
             {
-                Categories = _dataContext.Categories.ToList(),
-                Category = _dataContext
-                .Categories
-                .Include(c => c.Products)
-                .FirstOrDefault(c => c.Slug == id)
+                Categories = _dataAccessor.AllCategories(),
+                Category = _dataAccessor.GetCategory(id)
             };
 
             return View(viewModel);
@@ -44,10 +43,9 @@ namespace ASP_spr321.Controllers
             String controllerName = ControllerContext.ActionDescriptor.ControllerName;
             ShopProductViewModel viewModel = new()
             {
-                Product = _dataContext
-                .Products
-                .Include(p => p.Category)
-                .FirstOrDefault(p => p.Slug == id || p.Id.ToString() == id),
+                Product = _dataAccessor.GetProduct(id),
+
+
 
                 BreadCrumbs = new() {
                     new BreadCrumb() { Title = "Домашня", Url = "/" },
@@ -74,7 +72,6 @@ namespace ASP_spr321.Controllers
 
         public ViewResult Cart()
         {
-
             String? uaId = HttpContext.User.Claims
                 .FirstOrDefault(c => c.Type == ClaimTypes.Sid)?.Value;
             Cart? cart = _dataContext
@@ -85,22 +82,26 @@ namespace ASP_spr321.Controllers
 
             ShopCartViewModel viewModel = new()
             {
-                Products = _dataContext.Products.ToList(),
-                Cart =cart==null? null:
-                    cart with {
-                        CartItems = cart.CartItems.Select(ci => ci with
-                        {
-                            Product = ci.Product with {
-                                ImagesCsv= String.IsNullOrEmpty(ci.Product.ImagesCsv)
-                                   ? "/Shop/Image/no-image.jpg"
-                                   : ci.Product.ImagesCsv = String.Join(',',
-                                        ci.Product.ImagesCsv
-                                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                                        .Select(img => "/Shop/Image/" + img))
-                             }
-                        })
-                        .ToList()
-                    } 
+                Products = _dataAccessor.AllProducts()
+                   .Where(p => cart == null || !cart.CartItems.Any(ci => ci.ProductId == p.Id))
+                   .ToList(),
+                Cart = cart == null ? null :
+                   cart with
+                   {
+                       CartItems = cart.CartItems.Select(ci => ci with
+                       {
+                           Product = ci.Product with
+                           {
+                               ImagesCsv = String.IsNullOrEmpty(ci.Product.ImagesCsv)
+                                  ? "/Shop/Image/no-image.jpg"
+                                  : String.Join(',',
+                                       ci.Product.ImagesCsv
+                                       .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                       .Select(img => "/Shop/Image/" + img))
+                           }
+                       })
+                       .ToList()
+                   }
             };
             return View(viewModel);
         }

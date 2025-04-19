@@ -4,6 +4,7 @@ using ASP_spr321.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASP_spr321.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250412064342_rew")]
+    partial class rew
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,35 +25,6 @@ namespace ASP_spr321.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("ASP_spr321.Data.Entities.AccessToken", b =>
-                {
-                    b.Property<Guid>("Jti")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("Aud")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Exp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Iat")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Iss")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Nbf")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Sub")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Jti");
-
-                    b.ToTable("AccessTokens", "ASP");
-                });
 
             modelBuilder.Entity("ASP_spr321.Data.Entities.Cart", b =>
                 {

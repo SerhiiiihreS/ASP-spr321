@@ -45,10 +45,13 @@ builder.Services.AddDbContext<DataContext>(
             .GetConnectionString("LocalMs"))
     );
 
+builder.Services.AddScoped<DataAccessor>();
+
 builder.Services.AddControllers(options =>
 {
     options.ModelBinderProviders.Insert(0, new DoubleBinderProvider());
 });
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCors(options =>
 {
