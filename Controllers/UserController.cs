@@ -23,6 +23,8 @@ namespace ASP_spr311.Controllers
             return View();
         }
 
+
+
         public IActionResult Signup()
         {
             UserSinnupViewModel viewModel = new();
@@ -164,5 +166,7 @@ namespace ASP_spr311.Controllers
             }
             return errors;
         }
+
+
     }
 }

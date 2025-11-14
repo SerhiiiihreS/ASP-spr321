@@ -25,6 +25,7 @@ builder.Services.AddTransient<OTPservice, OtpRand>();
 
 builder.Services.AddSingleton<IKdfService, PbKdf1Service>();
 builder.Services.AddSingleton<IStorageService, FileStorageService>();
+builder.Services.AddSingleton<IStorageService, BlobServiceClient>();
 
 
 builder.Services.AddDistributedMemoryCache();
@@ -59,7 +60,7 @@ builder.Services.AddCors(options =>
         name: "CorsPolicy",
         policy =>
         {
-            policy.AllowAnyOrigin();
+            policy.AllowAnyOrigin().AllowAnyHeader();
         });
 });
 
@@ -81,6 +82,7 @@ app.UseRouting();
 app.UseCors("CorsPolicy");
 
 app.UseAuthorization(); 
+
 
 app.UseSession();
 
